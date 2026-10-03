@@ -99,7 +99,7 @@ case ${ANS} in
         then
 	    ${BIN_HOME}/first_master_setup_cli.sh "${ANSWER_REQUESTION_RESPONSE}" "${CRI_SOCKET}"
         else
-	    ${BIN_HOME}/first_master_setup_cli.sh ""
+	    ${BIN_HOME}/first_master_setup_cli.sh "" "${CRI_SOCKET}"
 	fi
 
         echo ""
