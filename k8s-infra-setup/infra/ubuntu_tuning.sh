@@ -14,15 +14,12 @@ CURRENT_TIME=`date '+%Y%m%d%H%M%S'`
 
 LIMITS_CONF="/etc/security/limits.conf"
 BACKUP_LIMITS_CONF="/etc/security/limits.conf_${CURRENT_TIME}"
-UPDATE_SIGNATURE_LIMITS_CONF="/etc/security/1.limits_conf"
 
 SYSCTL_CONF="/etc/sysctl.conf"
 BACKUP_SYSCTL_CONF="/etc/sysctl.conf_${CURRENT_TIME}"
-UPDATE_SIGNATURE_SYSCTL_CONF="/etc/1.sysctl_conf"
 
 MODULES_CONF="/etc/modules.conf"
 BACKUP_MODULES_CONF="/etc/modules.conf_${CURRENT_TIME}"
-UPDATE_SIGNATURE_MODULES_CONF="/etc/1.modules_conf"
 
 NEED_REBOOT="false"
 
@@ -156,9 +153,15 @@ EOL
 
 updateEnvironmentDirectory
 
-. ${UTILS_HOME}questionutils.sh ""
+. ${ETC_HOME}/infra_env_settings.sh
+. ${UTILS_HOME}/questionutils.sh ""
 
 sudo echo "" > /dev/null
+
+if [ ! -d "${SIGNATURE_PATH}" ]
+then
+    sudo mkdir -p ${SIGNATURE_PATH} > /dev/null 2>&1
+fi
 
 tuningLimitsConf
 tuningSysctlConf
