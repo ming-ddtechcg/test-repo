@@ -50,6 +50,7 @@ updateEnvironmentDirectory
 . ${ETC_HOME}/k8s_settings.sh
 
 OPTION_SANS="$1"
+CRI_SOCKET="$2"
 
 sudo echo "" > /dev/null
 echo "setup the first master node"
@@ -94,8 +95,9 @@ sudo kubeadm init \
     --pod-network-cidr="${POD_NETWORK_CIDR}" \
     --service-cidr="${SERVICE_NETWORK_CIDR}" \
     --control-plane-endpoint="${IP_ADDRESS}" \
+    --kubernetes-version="${KUBERNETS_VERSON}" \
+    --cri-socket ${CRI_SOCKET} \
     ${EXTRA_SANS_OPTION}
-    --kubernetes-version="${KUBERNETS_VERSON}"
 
 echo "** ignore the above kubeadm join commands"
 echo ""

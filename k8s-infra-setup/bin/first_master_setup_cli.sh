@@ -52,6 +52,7 @@ updateEnvironmentDirectory
 NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 
 OPTION_SANS="$1"
+CRI_SOCKET="$2"
 
 echo ""
 echo "the current node type: ${NODE_TYPE}"
@@ -62,7 +63,7 @@ case ${NODE_TYPE} in
     echo ""
     echo "perform the first master setup now..."
 
-    ${UTILS_HOME}/k8s_master_init_cli.sh "${OPTION_SANS}"
+    ${UTILS_HOME}/k8s_master_init_cli.sh "${OPTION_SANS}" "${CRI_SOCKET}"
 
     sleep 2
 

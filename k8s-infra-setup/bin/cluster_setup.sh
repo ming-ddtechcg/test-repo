@@ -56,6 +56,39 @@ NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 questionAndResponse "Is this the first master node (y/n)" "y n"
 ANS="${ANSWER_REQUESTION_RESPONSE}"
 
+CRI_SOCKET=""
+
+while true
+do
+    echo "Select Container Runtime Interface"
+    echo "=================================="
+    echo "1. CRI-O"
+    echo "2. containerd"
+    echo "3. cri-docker/docker"
+    echo ""
+    echo "9. terminate the cluster setup"
+    echo ""
+    questionAndResponse "select (1/2/3/9)" "1 2 3 9"
+
+    case ${ANSWER_REQUESTION_RESPONSE} in
+    '1')
+        CRI_SOCKET="/var/run/crio/crio.sock"
+        break
+        ;;
+    '2')
+        CRI_SOCKET="/run/containerd/containerd.sock"
+        break
+        ;;
+    '3')
+        CRI_SOCKET="/run/cri-dockerd.sock"
+        break
+        ;;
+    '9')
+        exit 0
+        ;;
+    esac
+done
+
 case ${ANS} in
 'y')
     case ${NODE_TYPE} in
@@ -64,7 +97,7 @@ case ${ANS} in
 
         if [ "${ANSWER_REQUESTION_RESPONSE}" != "" ]
         then
-	    ${BIN_HOME}/first_master_setup_cli.sh "${ANSWER_REQUESTION_RESPONSE}"
+	    ${BIN_HOME}/first_master_setup_cli.sh "${ANSWER_REQUESTION_RESPONSE}" "${CRI_SOCKET}"
         else
 	    ${BIN_HOME}/first_master_setup_cli.sh ""
 	fi
@@ -132,8 +165,6 @@ case ${ANS} in
 	    IS_WAITING="false"
 	done
     fi
-
-    ${UTILS_HOME}/inject_sds_registry_creds.sh
 
     case ${NODE_TYPE} in
     'MASTER')
