@@ -76,6 +76,7 @@ sudo apt-get install -y cri-o
 echo ""
 echo "verify the cri-o package installation"
 sudo apt list --installed | grep cri-o
+sudo apt-mark hold cri-o
 
 echo ""
 echo "enable and start the cri-o service"
