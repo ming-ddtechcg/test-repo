@@ -56,13 +56,13 @@ installK8sPackages()
     fi
 
     #questionAndResponse "enter Kubernetes version (i.e. v1.36)" ""
-    #KUBERNETES_VERSION="${ANSWER_REQUESTION_RESPONSE}"
-    KUBERNETES_VERSION="${K8S_VERSION}"
+    #KUBERNETS_PACKAGE_VERSION="${ANSWER_REQUESTION_RESPONSE}"
+    KUBERNETS_PACKAGE_VERSION="${KUBERNETS_PACKAGE_VERSION}"
 
-    if [ "${KUBERNETES_VERSION}" = "" ]
+    if [ "${KUBERNETS_PACKAGE_VERSION}" = "" ]
     then
         echo ""
-        echo "ERROR: unknown Kubernetes version, abort"
+        echo "ERROR: unknown Kubernetes package version, abort"
         echo ""
 
         return 2
@@ -86,7 +86,7 @@ installK8sPackages()
     curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key \
         | gpg --batch --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/ /" \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETS_PACKAGE_VERSION/deb/ /" \
         | tee /etc/apt/sources.list.d/kubernetes.list
 
     sudo apt-mark unhold kubelet kubectl kubeadm > /dev/null 2>&1

@@ -58,9 +58,9 @@ sudo apt remove -y cri-o > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
 #questionAndResponse "enter cri-o version (i.e. v1.36)" ""
-#CRIO_VERSION="${ANSWER_REQUESTION_RESPONSE}"
+#CRIO_PACKAGE_VERSION="${ANSWER_REQUESTION_RESPONSE}"
 
-if [ "${CRIO_VERSION}" = "" ]
+if [ "${CRIO_PACKAGE_VERSION}" = "" ]
 then
     echo ""
     echo "ERROR: unknown Cri-o version, abort"
@@ -75,10 +75,10 @@ echo "install the cri-o package"
 sudo apt-get update
 sudo apt-get install -y software-properties-common curl
 
-curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key \
+curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_PACKAGE_VERSION/deb/Release.key \
     | gpg --batch --yes --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 
-echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/ /" \
+echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_PACKAGE_VERSION/deb/ /" \
     | tee /etc/apt/sources.list.d/cri-o.list
 
 sudo apt-get install -y cri-o
