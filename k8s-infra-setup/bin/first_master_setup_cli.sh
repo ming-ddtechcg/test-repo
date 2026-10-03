@@ -68,33 +68,11 @@ case ${NODE_TYPE} in
 
     echo ""
 
-    ${UTILS_HOME}/inject_sds_registry_creds.sh
+    #${UTILS_HOME}/wait_all_pods_normal.sh
 
     sleep 2
 
     echo ""
-
-    ${UTILS_HOME}/cni_install.sh
-
-    sleep 2
-
-    echo ""
-
-    ${UTILS_HOME}/wait_all_pods_normal.sh
-
-    sleep 2
-
-    echo ""
-
-    ${UTILS_HOME}/ingress_controller_install.sh
-
-    sleep 2
-
-    echo ""
-
-
-    ${UTILS_HOME}/nfs_provisoner_install.sh
-
     ;;
 esac
 

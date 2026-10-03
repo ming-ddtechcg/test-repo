@@ -119,3 +119,5 @@ installInfraPackages
 
 installK8sPackages
 
+exit 0
+
