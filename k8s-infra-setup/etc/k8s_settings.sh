@@ -22,7 +22,13 @@ SERVICE_NETWORK_CIDR="10.96.0.0/12"
 EXTRA_SANS=""
 
 #
-# the k8s container version (apart from the binary version
+# the Kubernetes version
 #
-K8S_VERSION="1.21.4"
+# For example to install the Kubernetes version in 1.36.x:
+#   K8S_VERSION="v1.36" 
+#
+# Note:
+# 1. the patch is not required and will be used the lates patch version from the repository.
+#
+K8S_VERSION="v1.36"
 

@@ -48,6 +48,7 @@ updateEnvironmentDirectory()
 updateEnvironmentDirectory
 
 . ${UTILS_HOME}/questionutils.sh ""
+. ${ETC_HOME}/cri-o_settings.sh
 
 sudo echo "" > /dev/null
 
@@ -56,8 +57,17 @@ echo "check the cri-o installation on the current system"
 sudo apt remove -y cri-o > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
-questionAndResponse "enter cri-o version (i.e. v1.36)" ""
-CRIO_VERSION="${ANSWER_REQUESTION_RESPONSE}"
+#questionAndResponse "enter cri-o version (i.e. v1.36)" ""
+#CRIO_VERSION="${ANSWER_REQUESTION_RESPONSE}"
+
+if [ "${CRIO_VERSION}" = "" ]
+then
+    echo ""
+    echo "ERROR: unknown Cri-o version, abort"
+    echo ""
+
+    exit 1
+fi
 
 echo ""
 echo "install the cri-o package"
@@ -75,17 +85,26 @@ sudo apt-get install -y cri-o
 
 echo ""
 echo "verify the cri-o package installation"
-sudo apt list --installed | grep cri-o
-sudo apt-mark hold cri-o
+CRIO_INSTALLED=`apt list --installed 2> /dev/null | grep "cri-o"`
+if [ "${CRIO_INSTALLED}" != "" ]
+then 
+    sudo apt-mark hold cri-o
+
+    echo ""
+    echo "enable and start the cri-o service"
+    sudo systemctl enable crio
+    sudo systemctl start crio
+
+    echo ""
+    echo "the cri-o installation is completed"
+    echo ""
+
+    exit 0
+fi
 
 echo ""
-echo "enable and start the cri-o service"
-sudo systemctl enable crio
-sudo systemctl start crio
-
-echo ""
-echo "the cri-o installation is completed"
+echo "the cri-o installation is incompleted"
 echo ""
 
-exit 0
+exit 2
 

@@ -51,12 +51,23 @@ installK8sPackages()
         echo ""
 	echo "WARNING: the K8s install has been performed already, skip"
 	echo 
-	return
+
+	return 1
     fi
 
-    questionAndResponse "enter Kubernetes version (i.e. v1.36)" ""
-    KUBERNETES_VERSION="${ANSWER_REQUESTION_RESPONSE}"
-    
+    #questionAndResponse "enter Kubernetes version (i.e. v1.36)" ""
+    #KUBERNETES_VERSION="${ANSWER_REQUESTION_RESPONSE}"
+    KUBERNETES_VERSION="${K8S_VERSION}"
+
+    if [ "${KUBERNETES_VERSION}" = "" ]
+    then
+        echo ""
+        echo "ERROR: unknown Kubernetes version, abort"
+        echo ""
+
+        return 2
+    fi
+
     echo ""
     echo "check and disable swap"
     SWAP_INFO=`sudo cat /proc/swaps | grep -v "^Filename"`
@@ -80,16 +91,29 @@ installK8sPackages()
 
     sudo apt-mark unhold kubelet kubectl kubeadm > /dev/null 2>&1
     sudo apt-get install -y kubelet kubeadm kubectl
-    sudo apt-mark hold kubelet kubectl kubeadm
 
-    sudo apt list --installed | egrep "kubeadm|kubelet|kubectl"
+    K8S_INSTALLED=`apt list --installed 2> /dev/null | egrep "kubeadm|kubelet|kubectl"`
 
-    sudo tee -a ${K8S_INSTALL_SIGNATURE} <<EOL
+    if [ "${K8S_INSTALLED}" != "" ]
+    then
+        sudo apt-mark hold kubelet kubectl kubeadm
+        sudo tee -a ${K8S_INSTALL_SIGNATURE} <<EOL
 EOL
 
+        echo ""
+        echo "the k8s package installation is completed"
+        echo ""
+
+        return 0
+    fi
+
+    sudo rm -f ${K8S_INSTALL_SIGNATURE} > /dev/null 2>&1
+
     echo ""
-    echo "the k8s package installation is completed"
+    echo "the k8s package installation is incompleted"
     echo ""
+
+    return 3
 }
 
 
@@ -102,6 +126,7 @@ updateEnvironmentDirectory
 
 . ${ETC_HOME}/infra_env_settings.sh
 . ${UTILS_HOME}/questionutils.sh ""
+. ${ETC_HOME}/k8s_settings.sh
 
 sudo echo "" > /dev/null
 
@@ -111,6 +136,7 @@ then
 fi
 
 installK8sPackages
+STATUS=$?
 
-exit 0
+exit ${STATUS}
 
