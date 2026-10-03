@@ -53,11 +53,18 @@ installK8sPackages()
 	echo 
 	return
     fi
+
+    questionAndResponse "enter Kubernetes version (i.e. v1.36)" ""
+    KUBERNETES_VERSION="${ANSWER_REQUESTION_RESPONSE}"
     
     echo ""
-    echo "disable swap"
-    sudo swapoff -a
-    sudo sed -i '/swap/d' /etc/fstab
+    echo "check and disable swap"
+    SWAP_INFO=`sudo cat /proc/swaps | grep -v "^Filename"`
+    if [ "${SWAP_INFO}" != "" ]
+    then
+        sudo swapoff -a
+        sudo sed -i '/swap/d' /etc/fstab
+    fi
 
     echo ""
     echo "perform the k8s package installation"
@@ -88,30 +95,13 @@ EOL
 
 
 #
-# install infra packages
-#
-installInfraPackages()
-{
-    echo ""
-    echo "perform the infra package installation"
-    
-    ${INFRA_HOME}/ubuntu_tuning.sh
-
-    echo ""
-    echo "the infra package installation is completed"
-    echo ""
-}
-
-
-
-#
 # start from here
 #
 
 updateEnvironmentDirectory
 
 . ${ETC_HOME}/infra_env_settings.sh
-. ${UTILS_HOME}questionutils.sh ""
+. ${UTILS_HOME}/questionutils.sh ""
 
 sudo echo "" > /dev/null
 
@@ -119,8 +109,6 @@ if [ ! -d "${SIGNATURE_PATH}" ]
 then
     sudo mkdir -p ${SIGNATURE_PATH} > /dev/null 2>&1
 fi
-
-installInfraPackages
 
 installK8sPackages
 

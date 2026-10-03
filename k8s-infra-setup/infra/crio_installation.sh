@@ -56,7 +56,7 @@ echo "check the cri-o installation on the current system"
 sudo apt remove -y cri-o > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
-questionAndResponse "enter cri-o version" ""
+questionAndResponse "enter cri-o version (i.e. v1.36)" ""
 CRIO_VERSION="${ANSWER_REQUESTION_RESPONSE}"
 
 echo ""
