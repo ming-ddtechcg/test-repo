@@ -53,35 +53,67 @@ sudo echo "" > /dev/null
 
 echo ""
 echo "check the docker installation on the current system"
-sudo apt-get remove -y docker docker-engine docker.io containerd runc > /dev/null 2>&1
+sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1) > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
 echo ""
 echo "install the docker package"
-sudo apt-get install -y docker.io=20.10.12-0ubuntu2~20.04.1 > /dev/null 2>&1
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo ""
 echo "verify the docker package installation"
-sudo apt list --installed | grep docker
+DOCKER_INSTALLED=`apt list --installed 2> /dev/null | egrep "docker-ce|docker-ce-cli|containerd.io|docker-buildx-plugin|docker-compose-plugin"`
 
-echo ""
-echo "enable and start the docker service"
-sudo systemctl enable docker
-sudo systemctl start docker
+if [ "${DOCKER_INSTALLED}" != "" ]
+then
+    echo ""
+    echo "enable and start the docker service"
+    sudo systemctl enable docker
+    sudo systemctl start docker
 
-questionAndResponse "Grant `whoami` to perform all docker CLI tasks (y/n)" "y n"
-case ${ANSWER_REQUESTION_RESPONSE} in
-'y')
-    sudo usermod -aG docker `whoami`
-    echo ""
-    echo "WARNING: it is required `whoami` to log out and log in again"
-    echo ""
+    sudo apt-mark hold docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    questionAndResponse "Grant `whoami` to perform all docker CLI tasks (y/n)" "y n"
+    case ${ANSWER_REQUESTION_RESPONSE} in
+    'y')
+        sudo usermod -aG docker `whoami`
+        echo ""
+        echo "WARNING: it is required `whoami` to log out and log in again"
+        echo ""
     ;;
-esac
+    esac
+
+    echo ""
+    echo "the docker installation is completed"
+    echo ""
+    echo "Kubernetes 1.23+ is no longer to support dockershim, therefore,"
+    echo "cri-dockerd installation is must."
+    echo ""
+
+    exit 0
+fi
 
 echo ""
-echo "the docker installation is completed"
+echo "the docker installation is incompleted"
 echo ""
 
-exit 0
+exit 2
 
