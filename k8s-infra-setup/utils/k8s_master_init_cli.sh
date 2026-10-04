@@ -102,7 +102,6 @@ sudo kubeadm init \
 echo ""
 echo "Container Runtime Interface (CRI) option:"
 echo "--cri-socket unix://${CRI_SOCKET}"
-echo "${CRI_SOCKET}" > ${CRI_SOCKET_STORE} 2> /dev/null
 
 echo ""
 echo "*** ignore the above kubeadm join commands"

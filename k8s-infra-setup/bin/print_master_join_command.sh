@@ -52,7 +52,7 @@ updateEnvironmentDirectory
 sudo echo "" > /dev/null
 echo "print the master join command"
 
-questionAndResponse "Is this the first master node and the cluster is running (y/n)" "y n"
+questionAndResponse "Is this first master node (y/n)" "y n"
 
 case ${ANSWER_REQUESTION_RESPONSE} in
 'n')
@@ -63,9 +63,47 @@ case ${ANSWER_REQUESTION_RESPONSE} in
     ;;
 esac
 
-CERT_KEY=`sudo kubeadm init phase upload-certs --kubeconfig=/etc/kubernetes/admin.conf --upload-certs 2> /dev/null | tail -1`
+CRI_SOCKET=""
 
-MASTER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command --kubeconfig=/etc/kubernetes/admin.conf` --certificate-key ${CERT_KEY} --control-plane"
+while true
+do
+    echo "Select Container Runtime Interface (CRI) runs on the targetd node"
+    echo "================================================================="
+    echo "1. CRI-O"
+    echo "2. containerd"
+    echo "3. cri-docker/docker"
+    echo ""
+    echo "9. exit"
+    echo ""
+    questionAndResponse "select (1/2/3/9)" "1 2 3 9"
+
+    case ${ANSWER_REQUESTION_RESPONSE} in
+    '1')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "crio"`
+        break
+        ;;
+    '2')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "containerd"`
+        break
+        ;;
+    '3')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "cri-dockerd"`
+        break
+        ;;
+    '9')
+        exit 0
+        ;;
+    esac
+done
+
+CERT_KEY=`sudo kubeadm init phase upload-certs \
+    --kubeconfig=/etc/kubernetes/admin.conf \
+    --upload-certs 2> /dev/null \
+    | tail -1`
+
+MASTER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command \
+    --kubeconfig=/etc/kubernetes/admin.conf` \
+    --certificate-key ${CERT_KEY} --control-plane --cri-socket unix://${CRI_SOCKET}"
 
 echo ""
 echo "the master node join command: "

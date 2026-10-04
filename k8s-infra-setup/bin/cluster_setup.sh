@@ -59,8 +59,8 @@ ANS="${ANSWER_REQUESTION_RESPONSE}"
 
 while true
 do
-    echo "Select Container Runtime Interface"
-    echo "=================================="
+    echo "Select Container Runtime Interface (CRI) runs on this node"
+    echo "=========================================================="
     echo "1. CRI-O"
     echo "2. containerd"
     echo "3. cri-docker/docker"
@@ -71,15 +71,15 @@ do
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
-        CRI_SOCKET="/var/run/crio/crio.sock"
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "crio"`
         break
         ;;
     '2')
-        CRI_SOCKET="/run/containerd/containerd.sock"
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "containerd"`
         break
         ;;
     '3')
-        CRI_SOCKET="/run/cri-dockerd.sock"
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "cri-dockerd"`
         break
         ;;
     '9')

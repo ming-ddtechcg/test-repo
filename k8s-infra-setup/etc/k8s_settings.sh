@@ -44,7 +44,3 @@ KUBERNETS_PACKAGE_VERSION="v1.36"
 #
 KUBERNETS_VERSON="1.36.5"
 
-#
-# Container Runtime Interface (CRI) socket path
-#
-CRI_SOCKET_STORE="/etc/k8s_infra/cri_socket.store"

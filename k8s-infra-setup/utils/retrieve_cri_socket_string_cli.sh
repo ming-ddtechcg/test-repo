@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#!/bin/sh
+
 K8S_INFRA_HOME=""
 BIN_HOME="${K8S_INFRA_HOME}/bin"
 ETC_HOME="${K8S_INFRA_HOME}/etc"
@@ -10,7 +12,7 @@ EXECUTION_DIR=`dirname $0`
 
 PRG="$0"
 
-NODE_TYPE=""
+CRI_SOCKET=""
 
 
 
@@ -32,7 +34,7 @@ updateEnvironmentDirectory()
             K8S_INFRA_HOME="${CURRENT_PWD}"
             BIN_HOME="${K8S_INFRA_HOME}/bin"
             ETC_HOME="${K8S_INFRA_HOME}/etc"
-	    INFRA_HOME="${K8S_INFRA_HOME}/infra"
+            INFRA_HOME="${K8S_INFRA_HOME}/infra"
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             break
         fi
@@ -47,31 +49,21 @@ updateEnvironmentDirectory()
 # starts from here
 #
 
-updateEnvironmentDirectory
+CRI_TYPE="$1"
 
-NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
-
-OPTION_SANS="$1"
-CRI_SOCKET="$2"
-
-echo ""
-echo "the current node type: ${NODE_TYPE}"
-
-case ${NODE_TYPE} in
-'NONE')
-
-    echo ""
-    echo "perform the first master setup now..."
-
-    ${UTILS_HOME}/k8s_master_init_cli.sh "${OPTION_SANS}" "${CRI_SOCKET}"
-    sleep 2
-    echo ""
-
-    #${UTILS_HOME}/wait_all_pods_normal.sh
-    #sleep 2
-    #echo ""
+case ${CRI_TYPE} in
+'crio')
+    echo "/var/run/crio/crio.sock"
+    exit 0
     ;;
-esac
+'containerd')
+    echo "/run/containerd/containerd.sock"
+    exit 0
+    ;;
+'cri-dockerd')
+    echo "/run/cri-dockerd.sock"
+    exit 0
+done
 
-exit 0
+exit 1
 
