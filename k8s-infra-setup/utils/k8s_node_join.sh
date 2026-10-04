@@ -64,7 +64,7 @@ updateEnvironmentDirectory
 . ${UTILS_HOME}/questionutils.sh ""
 
 sudo echo "" > /dev/null
-sudo ${NODE_JOIN_COMMAND} 2>&1 | tee ${KUBERNETS_SETUP_LOG}
+sudo ${NODE_JOIN_COMMAND} 2>&1 | sudo tee ${KUBERNETS_SETUP_LOG}
 
 echo ""
 echo "The Kubernetes join log file is at:"
