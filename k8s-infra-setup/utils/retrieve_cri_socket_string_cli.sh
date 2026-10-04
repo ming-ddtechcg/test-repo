@@ -63,6 +63,7 @@ case ${CRI_TYPE} in
 'cri-dockerd')
     echo "/run/cri-dockerd.sock"
     exit 0
+    ;;
 done
 
 exit 1
