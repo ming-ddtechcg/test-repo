@@ -19,7 +19,7 @@ for line in stdin_data_list:
         if line.find( INITIAL_CLUSTER_ENTRY_KEYWORD ) > 0:
             sys.stdout.write( line )
             PREFIX = line[ 0: line.rfind( INITIAL_CLUSTER_ENTRY_KEYWORD ) ]
-            sys.stdout.write( PREFIX + INITIAL_CLUSTER_STATE_ENTRY_KEYWORD + "existing" )
+            sys.stdout.write( PREFIX + INITIAL_CLUSTER_STATE_ENTRY_KEYWORD + "existing\n" )
             continue
 
     sys.stdout.write( line )
