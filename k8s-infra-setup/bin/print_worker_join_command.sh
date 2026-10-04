@@ -47,7 +47,7 @@ updateEnvironmentDirectory()
 
 updateEnvironmentDirectory
 
-. ${UTILS_HOME}questionutils.sh ""
+. ${UTILS_HOME}/questionutils.sh ""
 
 sudo echo "" > /dev/null
 echo "print the worker join command"
