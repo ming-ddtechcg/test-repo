@@ -47,22 +47,29 @@ updateEnvironmentDirectory()
 # starts from here
 #
 
-CRI_TYPE="$1"
+NODE_JOIN_COMMAND="$1"
 
-case ${CRI_TYPE} in
-'crio')
-    echo "/var/run/crio/crio.sock"
-    exit 0
-    ;;
-'containerd')
-    echo "/run/containerd/containerd.sock"
-    exit 0
-    ;;
-'cri-dockerd')
-    echo "/run/cri-dockerd.sock"
-    exit 0
-    ;;
-esac
+if [ "${NODE_JOIN_COMMAND}" = "" ]
+then
+    echo ""
+    echo "ERROR: no node join command available, abort"
+    echo ""
 
-exit 1
+    exit 1
+fi
+
+updateEnvironmentDirectory
+
+. ${ETC_HOME}/k8s_settings.sh
+. ${UTILS_HOME}/questionutils.sh ""
+
+sudo echo "" > /dev/null
+sudo ${NODE_JOIN_COMMAND} 2>&1 | tee ${KUBERNETS_SETUP_LOG}
+
+echo ""
+echo "The Kubernetes join log file is at:"
+echo "${KUBERNETS_SETUP_LOG}"
+echo ""
+
+exit 0
 

@@ -63,7 +63,41 @@ case ${ANSWER_REQUESTION_RESPONSE} in
     ;;
 esac
 
-WORKER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command --kubeconfig=/etc/kubernetes/admin.conf`"
+CRI_SOCKET=""
+
+while true
+do
+    echo "Select Container Runtime Interface (CRI) runs on the targetd node"
+    echo "================================================================="
+    echo "1. CRI-O"
+    echo "2. containerd"
+    echo "3. cri-docker/docker"
+    echo ""
+    echo "9. exit"
+    echo ""
+    questionAndResponse "select (1/2/3/9)" "1 2 3 9"
+
+    case ${ANSWER_REQUESTION_RESPONSE} in
+    '1')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "crio"`
+        break
+        ;;
+    '2')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "containerd"`
+        break
+        ;;
+    '3')
+        CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "cri-dockerd"`
+        break
+        ;;
+    '9')
+        exit 0
+        ;;
+    esac
+done
+
+WORKER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command \
+    --kubeconfig=/etc/kubernetes/admin.conf` --cri-socket unix://${CRI_SOCKET}"
 
 echo ""
 echo "the worker node join command: "

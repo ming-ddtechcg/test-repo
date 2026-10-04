@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#!/bin/sh
-
 K8S_INFRA_HOME=""
 BIN_HOME="${K8S_INFRA_HOME}/bin"
 ETC_HOME="${K8S_INFRA_HOME}/etc"

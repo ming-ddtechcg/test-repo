@@ -148,7 +148,8 @@ case ${ANS} in
 		continue
 	    fi
 
-            ${UTILS_HOME}/k8s_node_join.sh "${ANS}"
+	    sudo echo "" > /dev/null
+	    sudo ${ANS}
 
             NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 
