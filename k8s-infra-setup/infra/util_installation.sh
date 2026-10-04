@@ -47,7 +47,9 @@ updateEnvironmentDirectory()
 
 updateEnvironmentDirectory
 
-sudo apt install python3 python3-pip python3-venv -y
+sudo apt install -y \
+    apt-utils \
+    python3 python3-pip python3-venv
 
 exit 1
 
