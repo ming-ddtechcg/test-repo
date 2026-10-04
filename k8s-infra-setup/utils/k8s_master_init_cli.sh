@@ -108,17 +108,13 @@ sudo kubeadm init \
     ${EXTRA_SANS_OPTION} 2>&1 | sudo tee ${KUBERNETS_SETUP_LOG}
 STATUS=$?
 
-echo "STATUS: ${STATUS}"
-
-RESULT=`grep "control-plane has initialized successfully" ${KUBERNETS_SETUP_LOG}`
-
-if [ "${RESULT}" = "" ]
+if [ "${STATUS}" -ne "0" ]
 then
     echo ""
     echo "WARNING: Kubernetes initialization has been terminated with issues, abort"
     echo ""
 
-    exit 4
+    exit ${STATUS}
 fi
 
 echo ""
