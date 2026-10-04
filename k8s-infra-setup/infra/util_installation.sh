@@ -47,9 +47,13 @@ updateEnvironmentDirectory()
 
 updateEnvironmentDirectory
 
+sudo apt update 
+
 sudo apt install -y \
     apt-utils \
     python3 python3-pip python3-venv
+
+sudo apt autoremove -y > /dev/null 2>&1
 
 exit 1
 
