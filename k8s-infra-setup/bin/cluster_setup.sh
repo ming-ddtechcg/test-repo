@@ -130,8 +130,9 @@ case ${ANS} in
         IS_WAITING="true"
 
 	echo ""
-	echo "For worker join, run \"print_worker_join_command.sh\" at the first master node"
 	echo "For master join, run \"print_master_join_command.sh\" at the first master node"
+        echo ""
+	echo "For worker join, run \"print_worker_join_command.sh\" at the first master node"
 
 	while [ "${IS_WAITING}" = "true" ]
 	do
