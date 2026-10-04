@@ -90,6 +90,37 @@ done
 
 case ${ANS} in
 'y')
+    while true
+    do
+        echo "Select Container Runtime Interface (CRI) runs on this node"
+        echo "=========================================================="
+        echo "1. CRI-O"
+        echo "2. containerd"
+        echo "3. cri-docker/docker"
+        echo ""
+        echo "9. terminate the cluster setup"
+        echo ""
+        questionAndResponse "select (1/2/3/9)" "1 2 3 9"
+
+        case ${ANSWER_REQUESTION_RESPONSE} in
+        '1')
+            CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "crio"`
+            break
+            ;;
+        '2')
+            CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "containerd"`
+            break
+            ;;
+        '3')
+            CRI_SOCKET=`${UTILS_HOME}/retrieve_cri_socket_string_cli.sh "cri-dockerd"`
+            break
+            ;;
+        '9')
+            exit 0
+            ;;
+        esac
+    done
+
     case ${NODE_TYPE} in
     'NONE')
         questionAndResponse "Enter extra subjcet alernative name(s) for certifcats to access the api-server\n(press enter to ignore, use comma between each SAN)\n" "skip"
