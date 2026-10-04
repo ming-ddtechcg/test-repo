@@ -49,7 +49,7 @@ updateEnvironmentDirectory()
 # starts from here
 #
 
-updateEnvironmentDirectory()
+updateEnvironmentDirectory
 
 . ${UTILS_HOME}/questionutils.sh ""
 
@@ -61,6 +61,7 @@ do
     echo "1. calico"
     echo ""
     echo "9. exit"
+    echo ""
     questionAndResponse "select (1/9)" "1 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
