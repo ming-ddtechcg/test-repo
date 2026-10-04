@@ -1,16 +1,57 @@
 #!/bin/sh
 
-XCLOUD_K8S_INFRA_HOME="/home/bda-master/xcloud-k8s-infra"
-UTILS_HOME="${XCLOUD_K8S_INFRA_HOME}/utils"
+K8S_INFRA_HOME=""
+BIN_HOME="${K8S_INFRA_HOME}/bin"
+ETC_HOME="${K8S_INFRA_HOME}/etc"
+INFRA_HOME="${K8S_INFRA_HOME}/infra"
+UTILS_HOME="${K8S_INFRA_HOME}/utils"
 
-. ${UTILS_HOME}/questionutils.sh ""
+EXECUTION_DIR=`dirname $0`
 
-NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
+PRG="$0"
+
+NODE_TYPE=""
+
+
+
+#
+# updates environment directory setup
+#
+updateEnvironmentDirectory()
+{
+    if [ "${EXECUTION_DIR}" = "." ]
+    then
+        EXECUTION_DIR=`pwd`
+    fi
+
+    CURRENT_PWD="${EXECUTION_DIR}"
+    while true
+    do
+        if [ -s "${CURRENT_PWD}/.k8s-infra-setup.txt" ]
+        then
+            K8S_INFRA_HOME="${CURRENT_PWD}"
+            BIN_HOME="${K8S_INFRA_HOME}/bin"
+            ETC_HOME="${K8S_INFRA_HOME}/etc"
+            INFRA_HOME="${K8S_INFRA_HOME}/infra"
+            UTILS_HOME="${K8S_INFRA_HOME}/utils"
+            break
+        fi
+
+        CURRENT_PWD=`dirname ${CURRENT_PWD}`
+    done
+}
+
 
 
 #
 # start from here
 #
+
+updateEnvironmentDirectory
+
+. ${UTILS_HOME}/questionutils.sh ""
+
+NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 
 case ${NODE_TYPE} in
 'NONE')
