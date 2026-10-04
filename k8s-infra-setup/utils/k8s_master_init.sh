@@ -1,17 +1,58 @@
 #!/bin/sh
 
-XCLOUD_K8S_INFRA_HOME="/home/bda-master/xcloud-k8s-infra"
-ETC_HOME="${XCLOUD_K8S_INFRA_HOME}/etc"
-UTILS_HOME="${XCLOUD_K8S_INFRA_HOME}/utils"
+#!/bin/sh
+
+K8S_INFRA_HOME=""
+BIN_HOME="${K8S_INFRA_HOME}/bin"
+ETC_HOME="${K8S_INFRA_HOME}/etc"
+INFRA_HOME="${K8S_INFRA_HOME}/infra"
+UTILS_HOME="${K8S_INFRA_HOME}/utils"
+
+EXECUTION_DIR=`dirname $0`
+
+PRG="$0"
+
+CRI_SOCKET=""
+
+
+
+#
+# updates environment directory setup
+#
+updateEnvironmentDirectory()
+{
+    if [ "${EXECUTION_DIR}" = "." ]
+    then
+        EXECUTION_DIR=`pwd`
+    fi
+
+    CURRENT_PWD="${EXECUTION_DIR}"
+    while true
+    do
+        if [ -s "${CURRENT_PWD}/.k8s-infra-setup.txt" ]
+        then
+            K8S_INFRA_HOME="${CURRENT_PWD}"
+            BIN_HOME="${K8S_INFRA_HOME}/bin"
+            ETC_HOME="${K8S_INFRA_HOME}/etc"
+            INFRA_HOME="${K8S_INFRA_HOME}/infra"
+            UTILS_HOME="${K8S_INFRA_HOME}/utils"
+            break
+        fi
+
+        CURRENT_PWD=`dirname ${CURRENT_PWD}`
+    done
+}
+
+
+
+#
+# starts from here
+#
+
+updateEnvironmentDirectory
 
 . ${ETC_HOME}/k8s_settings.sh
 . ${UTILS_HOME}/questionutils.sh ""
-
-
-
-#
-# start from here
-#
 
 sudo echo "" > /dev/null
 echo "setup the first master node"
@@ -36,6 +77,37 @@ then
     exit 2
 fi
 
+while true
+do
+    echo "Select Container Runtime Interface"
+    echo "=================================="
+    echo "1. CRI-O"
+    echo "2. containerd"
+    echo "3. cri-docker/docker"
+    echo ""
+    echo "9. terminate the cluster setup"
+    echo ""
+    questionAndResponse "select (1/2/3/9)" "1 2 3 9"
+
+    case ${ANSWER_REQUESTION_RESPONSE} in
+    '1')
+        CRI_SOCKET="/var/run/crio/crio.sock"
+        break
+        ;;
+    '2')
+        CRI_SOCKET="/run/containerd/containerd.sock"
+        break
+        ;;
+    '3')
+        CRI_SOCKET="/run/cri-dockerd.sock"
+        break
+        ;;
+    '9')
+        exit 0
+        ;;
+    esac
+done
+
 EXTRA_SANS_OPTION=""
 if [ "${EXTRA_SANS}" = "" ]
 then
@@ -58,9 +130,15 @@ sudo kubeadm init \
     --pod-network-cidr="${POD_NETWORK_CIDR}" \
     --service-cidr="${SERVICE_NETWORK_CIDR}" \
     --control-plane-endpoint="${IP_ADDRESS}" \
-    ${EXTRA_SANS_OPTION} \
-    --kubernetes-version="${K8S_VERSION}"
+    --kubernetes-version="${KUBERNETS_VERSON}" \
+    --cri-socket unix://${CRI_SOCKET} \
+    ${EXTRA_SANS_OPTION}
 
+echo ""
+echo "Container Runtime Interface (CRI) option:"
+echo "--cri-socket unix://${CRI_SOCKET}"
+
+echo ""
 echo "** ignore the above kubeadm join commands"
 echo ""
 

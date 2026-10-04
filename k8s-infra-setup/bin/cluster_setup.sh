@@ -11,6 +11,7 @@ EXECUTION_DIR=`dirname $0`
 PRG="$0"
 
 NODE_TYPE=""
+CRI_SOCKET=""
 
 
 
@@ -55,8 +56,6 @@ NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 
 questionAndResponse "Is this the first master node (y/n)" "y n"
 ANS="${ANSWER_REQUESTION_RESPONSE}"
-
-CRI_SOCKET=""
 
 while true
 do
