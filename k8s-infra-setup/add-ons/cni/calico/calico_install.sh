@@ -139,6 +139,7 @@ do
     esac
 done
 
+echo ""
 echo "start the CNI (calico) installation"
 
 case ${DEPLOYMENT_MODE} in
@@ -150,7 +151,18 @@ case ${DEPLOYMENT_MODE} in
     ;;
 esac
 
+echo ""
 echo "completed the CNI (calico) installation"
+echo ""
+echo "to remove the CNI (calico) installation with the following:"
+case ${DEPLOYMENT_MODE} in
+'root_on_master')
+    echo "sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${DEPLOYMENT_FILE}"
+    ;;
+'user_with_kubeconfig')
+    echo "kubectl apply -f ${DEPLOYMENT_FILE}"
+    ;;
+esac
 
 exit 0
 
