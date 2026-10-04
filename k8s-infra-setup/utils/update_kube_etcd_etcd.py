@@ -4,6 +4,10 @@ import sys
 
 
 INITIAL_CLUSTER_ENTRY_KEYWORD = "- --initial-cluster="
+INITIAL_CLUSTER_STATE_ENTRY_KEYWORD = "- --initial-cluster-state="
+INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD = "- --initial-advertise-peer-urls="
+LISTEN_PEER_URLS_ENTRY_KEYWORD = "- --listen-peer-urls="
+
 
 
 #
@@ -64,6 +68,64 @@ def updateInitialCluster( line, etcd_ips ):
 
 
 #
+# update initial advertise peer urls
+#
+def updateInitialAdvertisePeerUrls( line, etcd_ips ):
+    if line is None or len( line ) == 0:
+        return ""
+
+    if etcd_ips is None or len( etcd_ips ) == 0:
+        return line
+
+    etcd_ip_list = parseEtcdIps( etcd_ips )
+    if etcd_ip_list is None or len( etcd_ip_list ) == 0:
+        return line
+
+    PREFIX = line[ 0: line.rfind( INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD ) ]
+    element_line = ""
+
+    for etcd_ip in etcd_ip_list:
+        if len( element_line ) > 0:
+            element_line = element_line + ","
+
+        etcd_elements = etcd_ip.split( ":" )
+
+        element_line = element_line + "https://" + etcd_elements[ 1 ] + ":2380"
+
+    return str( PREFIX + INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD + element_line + "\n" )
+
+
+
+#
+# updates listen peer urls
+#
+def updateListenPeerUrls( line, etcd_ips ):
+    if line is None or len( line ) == 0:
+        return ""
+
+    if etcd_ips is None or len( etcd_ips ) == 0:
+        return line
+
+    etcd_ip_list = parseEtcdIps( etcd_ips )
+    if etcd_ip_list is None or len( etcd_ip_list ) == 0:
+        return line
+
+    PREFIX = line[ 0: line.rfind( LISTEN_PEER_URLS_ENTRY_KEYWORD ) ]
+    element_line = ""
+
+    for etcd_ip in etcd_ip_list:
+        if len( element_line ) > 0:
+            element_line = element_line + ","
+
+        etcd_elements = etcd_ip.split( ":" )
+
+        element_line = element_line + "https://" + etcd_elements[ 1 ] + ":2380"
+
+    return str( PREFIX + INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD + element_line + "\n" )
+
+
+
+#
 # start from here
 #
 
@@ -74,10 +136,24 @@ if etcd_ips is None or len( etcd_ips ) == 0:
     sys.exit( -1 )
 
 for line in stdin_data_list:
-    if line is not None and len( line ) > 0 and line.find( INITIAL_CLUSTER_ENTRY_KEYWORD ) > 0:
-        new_line = updateInitialCluster( line, etcd_ips )
-        sys.stdout.write( new_line )
-        continue
+    if line is not None and len( line ) > 0:
+        if line.find( INITIAL_CLUSTER_ENTRY_KEYWORD ) > 0:
+            new_line = updateInitialCluster( line, etcd_ips )
+            sys.stdout.write( new_line )
+            continue
+
+        if line.find( INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD ) > 0:
+            new_line = updateInitialAdvertisePeerUrls( line, etcd_ips )
+            sys.stdout.write( new_line )
+            continue
+
+        if line.find( LISTEN_PEER_URLS_ENTRY_KEYWORD ) > 0:
+            new_line = updateListenPeerUrls( line, etcd_ips )
+            sys.stdout.write( new_line )
+            continue
+
+        if line.find( INITIAL_CLUSTER_STATE_ENTRY_KEYWORD ) > 0:
+            continue
 
     sys.stdout.write( line )
 
