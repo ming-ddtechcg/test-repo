@@ -56,7 +56,7 @@ updateEnvironmentDirectory()
 sudo echo ""  > /dev/null
 echo "install CNI (calico)"
 
-sudo kubectl apply --kubeconfig=/etc/kubernetes/admin.conf -f ${CALICO_HOME}/deployments/calico.yaml > /dev/null 2>&1
+sudo kubectl apply --kubeconfig=/etc/kubernetes/admin.conf -f ${CALICO_HOME}/deployments/calico.yaml
 
 echo "completed the CNI (calico) installation"
 
