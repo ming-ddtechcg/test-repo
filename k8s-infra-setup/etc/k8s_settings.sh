@@ -57,4 +57,4 @@ K8S_INSTALL_SIGNATURE="${SIGNATURE_PATH}/1.k8s_install_signature"
 #
 # Kubernetes kueadm installation log
 #
-KUBERNETS_SETUP_LOG="${SIGNATURE_PATH}/kubeadm.log
+KUBERNETS_SETUP_LOG="${SIGNATURE_PATH}/kubeadm.log"
