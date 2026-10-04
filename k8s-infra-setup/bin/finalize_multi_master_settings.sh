@@ -119,8 +119,6 @@ case ${NODE_TYPE} in
     echo "working on configurations for the apiserver"
     ${UTILS_HOME}/k8s_san_apiserver_update.sh
 
-    ${UTILS_HOME}/restart_k8s_apiserver.sh
-
     echo ""
     echo "completed the multi-master finalize settings"
     echo ""
