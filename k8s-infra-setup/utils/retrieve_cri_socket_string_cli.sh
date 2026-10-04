@@ -64,7 +64,7 @@ case ${CRI_TYPE} in
     echo "/run/cri-dockerd.sock"
     exit 0
     ;;
-done
+esac
 
 exit 1
 
