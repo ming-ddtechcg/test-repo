@@ -44,3 +44,17 @@ KUBERNETS_PACKAGE_VERSION="v1.36"
 #
 KUBERNETS_VERSON="1.36.5"
 
+#
+# the path of the signatues for updates or changes
+#
+SIGNATURE_PATH="/etc/k8s_infra"
+
+#
+# Kubernetes package installation
+#
+K8S_INSTALL_SIGNATURE="${SIGNATURE_PATH}/1.k8s_install_signature"
+
+#
+# Kubernetes kueadm installation log
+#
+KUBERNETS_SETUP_LOG="${SIGNATURE_PATH}/kubeadm.log

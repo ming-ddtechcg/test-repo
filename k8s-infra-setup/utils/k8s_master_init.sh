@@ -132,11 +132,26 @@ sudo kubeadm init \
     --control-plane-endpoint="${IP_ADDRESS}" \
     --kubernetes-version="${KUBERNETS_VERSON}" \
     --cri-socket unix://${CRI_SOCKET} \
-    ${EXTRA_SANS_OPTION}
+    ${EXTRA_SANS_OPTION} 2>&1 | tee ${KUBERNETS_SETUP_LOG}
+STATUS=$?
+
+if [ "${STATUS}" -gt "0" ]
+then
+    echo ""
+    echo "WARNING: Kubernetes initialization has been terminated with issues, abort"
+    echo ""
+    exit ${STATUS}
+fi
 
 echo ""
 echo "Container Runtime Interface (CRI) option:"
 echo "--cri-socket unix://${CRI_SOCKET}"
+echo ""
+
+echo ""
+echo "The Kubernetes init log file is at:"
+echo "${KUBERNETS_SETUP_LOG}"
+echo ""
 
 echo ""
 echo "** ignore the above kubeadm join commands"

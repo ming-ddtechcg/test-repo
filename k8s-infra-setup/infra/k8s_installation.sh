@@ -125,8 +125,8 @@ EOL
 updateEnvironmentDirectory
 
 . ${ETC_HOME}/infra_env_settings.sh
-. ${UTILS_HOME}/questionutils.sh ""
 . ${ETC_HOME}/k8s_settings.sh
+. ${UTILS_HOME}/questionutils.sh ""
 
 sudo echo "" > /dev/null
 
