@@ -51,7 +51,7 @@ updateEnvironmentDirectory()
 # starts from here
 #
 
-updateEnvironmentDirectory()
+updateEnvironmentDirectory
 
 sudo echo ""  > /dev/null
 echo "install CNI (calico)"
