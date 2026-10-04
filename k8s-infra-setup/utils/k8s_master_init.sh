@@ -75,6 +75,14 @@ then
     exit 2
 fi
 
+if [ ! -f "${K8S_INSTALL_SIGNATURE}" ]
+then
+    echo ""
+    echo "ERROR: Kubernetes package installation is pending, abort"
+    echo ""
+    exit 3
+fi
+
 while true
 do
     echo "Select Container Runtime Interface (CRI) runs on this node"
@@ -131,14 +139,16 @@ sudo kubeadm init \
     --kubernetes-version="${KUBERNETS_VERSON}" \
     --cri-socket unix://${CRI_SOCKET} \
     ${EXTRA_SANS_OPTION} 2>&1 | tee ${KUBERNETS_SETUP_LOG}
-STATUS=$?
 
-if [ "${STATUS}" -gt "0" ]
+RESULT=`grep "control-plane has initialized successfully" ${KUBERNETS_SETUP_LOG}`
+
+if [ "${RESULT}" = "" ]
 then
     echo ""
     echo "WARNING: Kubernetes initialization has been terminated with issues, abort"
     echo ""
-    exit ${STATUS}
+
+    exit 4
 fi
 
 echo ""
