@@ -121,7 +121,7 @@ def updateListenPeerUrls( line, etcd_ips ):
 
         element_line = element_line + "https://" + etcd_elements[ 1 ] + ":2380"
 
-    return str( PREFIX + INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD + element_line + "\n" )
+    return str( PREFIX + LISTEN_PEER_URLS_ENTRY_KEYWORD + element_line + "\n" )
 
 
 
