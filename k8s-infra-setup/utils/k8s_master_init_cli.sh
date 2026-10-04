@@ -96,7 +96,7 @@ sudo kubeadm init \
     --service-cidr="${SERVICE_NETWORK_CIDR}" \
     --control-plane-endpoint="${IP_ADDRESS}" \
     --kubernetes-version="${KUBERNETS_VERSON}" \
-    --cri-socket file://${CRI_SOCKET} \
+    --cri-socket unix://${CRI_SOCKET} \
     ${EXTRA_SANS_OPTION}
 
 echo "** ignore the above kubeadm join commands"
