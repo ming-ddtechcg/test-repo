@@ -96,18 +96,13 @@ do
     esac
 done
 
-#CERT_KEY=`sudo kubeadm init phase upload-certs \
-#    --kubeconfig=/etc/kubernetes/admin.conf \
-#    --upload-certs 2> /dev/null \
-#    | tail -1`
-
-#MASTER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command \
-#    --kubeconfig=/etc/kubernetes/admin.conf` \
-#    --certificate-key ${CERT_KEY} --control-plane --cri-socket unix://${CRI_SOCKET}"
+CERT_KEY=`sudo kubeadm init phase upload-certs \
+    --upload-certs 2> /dev/null \
+    | tail -1`
 
 MASTER_JOIN_COMMAND="`sudo kubeadm token create --print-join-command \
     --kubeconfig=/etc/kubernetes/admin.conf` \
-    --control-plane --cri-socket unix://${CRI_SOCKET}"
+    --certificate-key ${CERT_KEY} --control-plane --cri-socket unix://${CRI_SOCKET}"
 
 echo ""
 echo "the master node join command: "
