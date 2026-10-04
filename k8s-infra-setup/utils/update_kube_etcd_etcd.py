@@ -6,7 +6,6 @@ import sys
 INITIAL_CLUSTER_ENTRY_KEYWORD = "- --initial-cluster="
 INITIAL_CLUSTER_STATE_ENTRY_KEYWORD = "- --initial-cluster-state="
 INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD = "- --initial-advertise-peer-urls="
-LISTEN_PEER_URLS_ENTRY_KEYWORD = "- --listen-peer-urls="
 
 
 
@@ -144,11 +143,6 @@ for line in stdin_data_list:
 
         if line.find( INITIAL_ADVERTISE_PEER_URLS_ENTRY_KEYWORD ) > 0:
             new_line = updateInitialAdvertisePeerUrls( line, etcd_ips )
-            sys.stdout.write( new_line )
-            continue
-
-        if line.find( LISTEN_PEER_URLS_ENTRY_KEYWORD ) > 0:
-            new_line = updateListenPeerUrls( line, etcd_ips )
             sys.stdout.write( new_line )
             continue
 

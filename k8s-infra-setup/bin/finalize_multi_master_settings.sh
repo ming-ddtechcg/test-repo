@@ -107,12 +107,15 @@ case ${NODE_TYPE} in
     echo "working on etcd.yaml"
     sudo cat /etc/kubernetes/manifests/etcd.yaml | \
 	${UTILS_HOME}/update_kube_etcd_etcd.py "${MASTER_NAME_IP}" > /tmp/etcd.yaml.new
+    sudo cat /tmp/etcd.yaml.new | \
+	${UTILS_HOME}/update_kube_etcd_cluster_state.py > /tmp/etcd.yaml.new.1
 
-    if [ -s "/tmp/etcd.yaml.new" ]
+    if [ -s "/tmp/etcd.yaml.new.1" ]
     then
-        sudo mv /tmp/etcd.yaml.new /etc/kubernetes/manifests/etcd.yaml
+        sudo mv /tmp/etcd.yaml.new.1 /etc/kubernetes/manifests/etcd.yaml
 	sudo chown root:root /etc/kubernetes/manifests/etcd.yaml
 	sudo chmod 600 /etc/kubernetes/manifests/etcd.yaml
+        sudo rm -f /tmp/etcd.yaml.new > /dev/null 2>&1
     fi
 
     echo ""
