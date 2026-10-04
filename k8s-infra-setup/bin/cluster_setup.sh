@@ -54,7 +54,7 @@ updateEnvironmentDirectory
 
 NODE_TYPE="`${UTILS_HOME}/retrieve_node_type.sh`"
 
-questionAndResponse "Is this first master node (y/n)" "y n"
+questionAndResponse "Is this the first master node (y/n)" "y n"
 ANS="${ANSWER_REQUESTION_RESPONSE}"
 
 case ${ANS} in
