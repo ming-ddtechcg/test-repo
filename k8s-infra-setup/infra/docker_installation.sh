@@ -54,7 +54,7 @@ sudo echo "" > /dev/null
 echo ""
 echo "check the docker installation on the current system"
 sudo apt-mark unhold docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin > /dev/null 2>&1
-sudo apt remove -y $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1) > /dev/null 2>&1
+sudo apt remove -y $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc 2> /dev/null | cut -f1) > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
 echo ""
