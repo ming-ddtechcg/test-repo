@@ -160,7 +160,7 @@ case ${DEPLOYMENT_MODE} in
     echo "sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${DEPLOYMENT_FILE}"
     ;;
 'user_with_kubeconfig')
-    echo "kubectl apply -f ${DEPLOYMENT_FILE}"
+    echo "kubectl delete -f ${DEPLOYMENT_FILE}"
     ;;
 esac
 
