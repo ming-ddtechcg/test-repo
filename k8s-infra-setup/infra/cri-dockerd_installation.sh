@@ -77,8 +77,8 @@ then
     echo ""
     echo "enable and start the cri-dockerd service"
     sudo systemctl daemon-reload
-    sudo systemctl enable cri-dockerd
-    sudo systemctl start cri-dockrd
+    sudo systemctl enable cri-docker
+    sudo systemctl start cri-docker
 
     echo ""
     echo "the cri-dockerd installation is completed"
