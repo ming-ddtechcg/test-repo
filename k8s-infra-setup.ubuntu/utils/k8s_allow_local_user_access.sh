@@ -1,8 +1,9 @@
 #!/bin/sh
 
 
+
 #
-# start from here
+# starts from here
 #
 
 sudo echo "" > /dev/null
