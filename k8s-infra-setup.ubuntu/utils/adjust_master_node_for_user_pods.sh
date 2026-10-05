@@ -43,6 +43,7 @@ do
 	    --overwrite=true \
 	    node-role.kubernetes.io/control-plane=:NoSchedule 2> /dev/null
         ;;
+    esac
 done
 
 echo "completed the the master node adjustment"
