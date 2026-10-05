@@ -84,6 +84,11 @@ then
         echo "${line}" >> /tmp/containerd_config.toml
 
     done < /etc/containerd/config.toml
+
+    if [ -s "/tmp/containerd_config.toml" ]
+    then
+        sudo mv /tmp/containerd_config.toml /etc/containerd/config.toml
+    fi
 fi
 
 echo ""
