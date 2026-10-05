@@ -78,6 +78,7 @@ then
         if [ "${IS_DISABLED_PLUGINS}" != "" ]
         then
             echo "#${line}" >> /tmp/containerd_config.toml
+            continue
         fi
 
         echo "${line}" >> /tmp/containerd_config.toml
