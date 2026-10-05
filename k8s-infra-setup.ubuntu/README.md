@@ -11,6 +11,13 @@ This package is to support the following tasks:
 - Cluster setup for the single or multi master nodes as welll as worker nodes.
 - Add-ons installation.
 
+## Platform to be supported
+
+The on-prem solution provides the wild range of the enviuronments such as:
+- VirtualBox
+- Kernel-based Virtual Machine (KVM)
+- others
+
 ## Tested Kubernetes versions
 
 This setup has been tested with the following Kubernetes released versions:
