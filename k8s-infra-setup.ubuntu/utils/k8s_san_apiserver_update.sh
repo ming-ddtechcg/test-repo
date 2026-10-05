@@ -62,7 +62,15 @@ case ${NODE_TYPE} in
     ;;
 esac
 
-questionAndResponse "Enter subjcet alernative name for api-server (press enter to ignore)\n" "skip"
+echo ""
+echo "Update Subjcet Alernative Name (SAN) for the api-server with:"
+echo "- master node:     the changes will be admin.conf and the kubelet configuration"
+echo "- non master node: the change will be only the kubelet configuration"
+echo ""
+echo "It is recommended to provide FQDN possible first, and IP address is second (if FQDN is unavailable)."
+echo ""
+echo "*** one entry only ***"
+questionAndResponse "Enter SAN (press enter to ignore)\n" "skip"
 
 if [ "${ANSWER_REQUESTION_RESPONSE}" = "" ]
 then
