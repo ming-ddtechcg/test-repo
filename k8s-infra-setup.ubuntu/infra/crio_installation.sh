@@ -54,6 +54,7 @@ sudo echo "" > /dev/null
 
 echo ""
 echo "check the cri-o installation on the current system"
+sudo apt-mark unhold cri-o > /dev/null 2>&1
 sudo apt remove -y cri-o > /dev/null 2>&1
 sudo apt autoremove -y > /dev/null 2>&1
 
