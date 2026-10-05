@@ -30,5 +30,5 @@ $ kubectl get nodes
 NAME                     STATUS   ROLES           AGE    VERSION
 kubee-mnt1-ubuntu-2204   Ready    control-plane   129m   v1.36.5
 kubee-mnt2-ubuntu-2204   Ready    control-plane   95m    v1.36.5
-kubee-wnt1-ubuntu-2204   Ready    <none>          16m    v1.36.5
+kubee-wnt1-ubuntu-2204   Ready    worker          16m    v1.36.5
 ```
