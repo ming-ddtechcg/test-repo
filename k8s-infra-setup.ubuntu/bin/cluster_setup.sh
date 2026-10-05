@@ -191,7 +191,8 @@ case ${ANS} in
         esac
 	;;
     'WORKER')
-        ${UTILS_HOME}/label_all_worker_nodes.sh
+        echo ""
+        echo "The node has been setup as: ${NODE_TYPE}"
 	;;
     *)
         echo ""
