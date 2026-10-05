@@ -16,10 +16,10 @@ CRI_DOCKERD_DOWNLOAD_RELEASE_DOWNLOAD_URL_TEMPLATE="https://github.com/Mirantis/
 #
 # the cri-dockerd systemd service download URL
 #
-CRI_DOCKERD_SYSTEMD_SERVICE_DOWNLOAD_URL="https://github.com/Mirantis/cri-dockerd/blob/master/packaging/systemd/cri-docker.service"
+CRI_DOCKERD_SYSTEMD_SERVICE_DOWNLOAD_URL="https://github.com/Mirantis/cri-dockerd/raw/refs/heads/master/packaging/systemd/cri-docker.service"
 
 #
 # the cri-dockerd systemd socket download URL
 #
-CRI_DOCKERD_SYSTEMD_SOCKET_DOWNLOAD_URL="https://github.com/Mirantis/cri-dockerd/blob/master/packaging/systemd/cri-docker.socket"
+CRI_DOCKERD_SYSTEMD_SOCKET_DOWNLOAD_URL="https://github.com/Mirantis/cri-dockerd/raw/refs/heads/master/packaging/systemd/cri-docker.socket"
 
