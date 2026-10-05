@@ -67,6 +67,24 @@ curl -Ls ${CONTAINERD_SYSTEMD_SERVICE_DOWNLOAD_URL} -o /tmp/bin/containerd.servi
 sudo install /tmp/bin/containerd.service /lib/systemd/system/containerd.service
 sudo rm -fr /tmp/bin /tmp/download.tgz > /dev/null 2>&1
 
+if [ -s "/etc/containerd/config.toml" ]
+then
+    touch /tmp/containerd_config.toml
+
+    while IFS= read -r line
+    do
+        IS_DISABLED_PLUGINS=`echo ${line} | grep "^disabled_plugins"`
+
+        if [ "${IS_DISABLED_PLUGINS}" != "" ]
+        then
+            echo "#${line}" >> /tmp/containerd_config.toml
+        fi
+
+        echo "${line}" >> /tmp/containerd_config.toml
+
+    done < /etc/containerd/config.toml
+fi
+
 echo ""
 echo "verify the containerd package installation"
 if [ -f "/usr/local/bin/containerd" ]
