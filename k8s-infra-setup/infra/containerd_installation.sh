@@ -62,36 +62,30 @@ DOWNLOAD_URL=`echo ${CONTAINERD_DOWNLOAD_RELEASE_DOWNLOAD_URL_TEMPLATE} \
 curl -Ls ${DOWNLOAD_URL} -o /tmp/download.tgz
 cd /tmp
 gzip -dc /tmp/download.tgz | tar xvf - > /dev/null 2>&1
-
-exit 0
-
-sudo install -o root -g root -m 0755 /tmp/cri-dockerd/cri-dockerd /usr/local/bin/cri-dockerd
-curl -Ls ${CRI_DOCKERD_SYSTEMD_SERVICE_DOWNLOAD_URL} -o /tmp/cri-dockerd/cri-docker.service
-curl -Ls ${CRI_DOCKERD_SYSTEMD_SOCKET_DOWNLOAD_URL} -o /tmp/cri-dockerd/cri-docker.socket
-sudo install /tmp/cri-dockerd/cri-docker.service /lib/systemd/system/cri-docker.service
-sudo install /tmp/cri-dockerd/cri-docker.socket /lib/systemd/system/cri-docker.socket
-sudo sed -i -e 's|/usr/bin/cri-dockerd|/usr/local/bin/cri-dockerd|g' /lib/systemd/system/cri-docker.service
-sudo rm -fr /tmp/cri-dockerd /tmp/download.tgz > /dev/null 2>&1
+sudo install -o root -g root -m 0755 /tmp/bin/* /usr/local/bin/
+curl -Ls ${CONTAINERD_SYSTEMD_SERVICE_DOWNLOAD_URL} -o /tmp/bin/containerd.service
+sudo install /tmp/bin/containerd.service /lib/systemd/system/containerd.service
+sudo rm -fr /tmp/bin /tmp/download.tgz > /dev/null 2>&1
 
 echo ""
 echo "verify the cri-dockerd package installation"
-if [ -f "/usr/local/bin/cri-dockerd" ]
+if [ -f "/usr/local/bin/containerd" ]
 then
     echo ""
-    echo "enable and start the cri-dockerd service"
+    echo "enable and start the containerd service"
     sudo systemctl daemon-reload
-    sudo systemctl enable cri-docker
-    sudo systemctl start cri-docker
+    sudo systemctl enable containerd
+    sudo systemctl start containerd
 
     echo ""
-    echo "the cri-dockerd installation is completed"
+    echo "the containerd installation is completed"
     echo ""
 
     exit 0
 fi
 
 echo ""
-echo "the cri-dockerd installation is incompleted"
+echo "the containerd installation is incompleted"
 echo ""
 
 exit 1
