@@ -53,15 +53,18 @@ updateEnvironmentDirectory
 sudo echo "" > /dev/null
 
 echo ""
-echo "check the cri-dockerd installation on the current system"
+echo "check the containerd installation on the current system"
 
 echo ""
-echo "install the cri-dockred package"
-DOWNLOAD_URL=`echo ${CRI_DOCKERD_DOWNLOAD_RELEASE_DOWNLOAD_URL_TEMPLATE} \
-    | sed -e 's|##CRI_DOCKERD_PACKAGE_VERSION##|'${CRI_DOCKERD_PACKAGE_VERSION}'|g'`
+echo "install the containerd package"
+DOWNLOAD_URL=`echo ${CONTAINERD_DOWNLOAD_RELEASE_DOWNLOAD_URL_TEMPLATE} \
+    | sed -e 's|##CONTAINERD_PACKAGE_VERSION##|'${CONTAINERD_PACKAGE_VERSION}'|g'`
 curl -Ls ${DOWNLOAD_URL} -o /tmp/download.tgz
 cd /tmp
 gzip -dc /tmp/download.tgz | tar xvf - > /dev/null 2>&1
+
+exit 0
+
 sudo install -o root -g root -m 0755 /tmp/cri-dockerd/cri-dockerd /usr/local/bin/cri-dockerd
 curl -Ls ${CRI_DOCKERD_SYSTEMD_SERVICE_DOWNLOAD_URL} -o /tmp/cri-dockerd/cri-docker.service
 curl -Ls ${CRI_DOCKERD_SYSTEMD_SOCKET_DOWNLOAD_URL} -o /tmp/cri-dockerd/cri-docker.socket
