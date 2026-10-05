@@ -9,7 +9,7 @@ cd ~/k8s-infra-setup.ubuntu/bin
 ./cluster_setup.sh
 ```
 
-The following is the console output for:
+The following is the setup requirements:
 
 1. using cri-o for the CRI
 2. with SAN entries
