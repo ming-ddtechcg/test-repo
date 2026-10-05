@@ -68,7 +68,7 @@ curl -Ls ${CRI_DOCKERD_SYSTEMD_SOCKET_DOWNLOAD_URL} -o /tmp/cri-dockerd/cri-dock
 sudo install /tmp/cri-dockerd/cri-docker.service /lib/systemd/system/cri-docker.service
 sudo install /tmp/cri-dockerd/cri-docker.socket /lib/systemd/system/cri-docker.socket
 sudo sed -i -e 's|/usr/bin/cri-dockerd|/usr/local/bin/cri-dockerd|g' /lib/systemd/system/cri-docker.service
-rm -fr /tmp/cri-dockerd /tmp/download.tgz > /dev/null 2>&1
+sudo rm -fr /tmp/cri-dockerd /tmp/download.tgz > /dev/null 2>&1
 
 echo ""
 echo "verify the cri-dockerd package installation"
