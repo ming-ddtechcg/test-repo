@@ -48,7 +48,7 @@ updateEnvironmentDirectory()
 updateEnvironmentDirectory
 
 . ${UTILS_HOME}/questionutils.sh ""
-. ${ETC_HOME}/cri-dockerd_settings.sh
+. ${ETC_HOME}/containerd_settings.sh
 
 sudo echo "" > /dev/null
 
