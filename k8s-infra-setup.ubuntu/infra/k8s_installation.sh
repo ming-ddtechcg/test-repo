@@ -84,10 +84,10 @@ installK8sPackages()
     sudo apt-get install -y software-properties-common curl
 
     curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key \
-        | gpg --batch --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
     echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETS_PACKAGE_VERSION/deb/ /" \
-        | tee /etc/apt/sources.list.d/kubernetes.list
+        | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
     sudo apt-mark unhold kubelet kubectl kubeadm > /dev/null 2>&1
     sudo apt-get install -y kubelet kubeadm kubectl
