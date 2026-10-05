@@ -62,3 +62,8 @@ Your Kubernetes control-plane has initialized successfully!
 ...
 
 ```
+
+## Add-ons
+
+The first time setup is required Container Network Interface (CNI), please check the add-ons section.
+

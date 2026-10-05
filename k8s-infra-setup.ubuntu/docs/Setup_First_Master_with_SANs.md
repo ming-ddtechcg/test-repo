@@ -91,3 +91,8 @@ The certifcations will be generated not only for its node IP address, but also f
 ```
 [certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt1-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.20 192.168.131.29]
 ```
+
+## Add-ons
+
+The first time setup is required Container Network Interface (CNI), please check the add-ons section.
+
