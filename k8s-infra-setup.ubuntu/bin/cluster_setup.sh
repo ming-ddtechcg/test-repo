@@ -110,10 +110,10 @@ case ${ANS} in
         esac
 
         echo ""
-        questionAndResponse "Will this master node schedule the user pods (y/n)" "y n"
+        questionAndResponse "Will this master node be allowed to schedule the user pods (y/n)" "y n"
         case ${ANSWER_REQUESTION_RESPONSE} in
         'y')
-            ${UTILS_HOME}/adjust_master_node_for_user_pods.sh
+            ${UTILS_HOME}/adjust_master_node_for_user_pods.sh "allow"
 	    ;;
         esac
 
@@ -175,10 +175,10 @@ case ${ANS} in
     case ${NODE_TYPE} in
     'MASTER')
         echo ""
-        questionAndResponse "Will this master node schedule the user pods (y/n)" "y n"
+        questionAndResponse "Will this master node be allowed to schedule the user pods (y/n)" "y n"
         case ${ANSWER_REQUESTION_RESPONSE} in
         'y')
-            ${UTILS_HOME}/adjust_master_node_for_user_pods.sh
+            ${UTILS_HOME}/adjust_master_node_for_user_pods.sh "allow"
             ;;
         esac
 
