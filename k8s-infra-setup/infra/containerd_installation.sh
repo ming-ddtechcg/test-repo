@@ -68,7 +68,7 @@ sudo install /tmp/bin/containerd.service /lib/systemd/system/containerd.service
 sudo rm -fr /tmp/bin /tmp/download.tgz > /dev/null 2>&1
 
 echo ""
-echo "verify the cri-dockerd package installation"
+echo "verify the containerd package installation"
 if [ -f "/usr/local/bin/containerd" ]
 then
     echo ""
