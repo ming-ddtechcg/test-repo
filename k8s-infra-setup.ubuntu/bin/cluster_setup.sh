@@ -120,6 +120,13 @@ case ${ANS} in
 	echo ""
 
 	;;
+    *)
+        echo ""
+        echo "WARNING: the current node type is running as: ${NODE_TYPE}"
+        echo ""
+        echo "It can not be proceeded, unless the node is required to \"kubeadm init\""
+        echo ""
+        ;;
     esac
 
     echo ""
@@ -186,6 +193,11 @@ case ${ANS} in
     'WORKER')
         ${UTILS_HOME}/label_all_worker_nodes.sh
 	;;
+    *)
+        echo ""
+        echo "WARNING: unable to determine the node type after the node configuration, check log."
+        echo ""
+        ;;
     esac
 
     echo ""
