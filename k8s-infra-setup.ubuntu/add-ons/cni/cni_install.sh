@@ -60,7 +60,7 @@ do
     echo "============================================================="
     echo "1. calico"
     echo ""
-    echo "9. exit"
+    echo "9. return"
     echo ""
     questionAndResponse "select (1/9)" "1 9"
 
