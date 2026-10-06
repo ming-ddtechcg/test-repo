@@ -1,6 +1,6 @@
-# Setup the first master node with SANs
+# Setup the first master node with LB and SANs
 
-This is to setup the master node with SANs (Subject Alternative Names) for the apiserver(s) mainly.
+This is to setup the master node with Load Balancer (LB) and SANs (Subject Alternative Names) for the apiserver(s) mainly.
 
 For setting up a first master node with the following instruction:
 
@@ -52,9 +52,15 @@ Select Container Runtime Interface (CRI) runs on this node
 
 select (1/2/3/9): 1
 
+Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number
+(press enter to ignore, use comma between each SAN)
+: kubee-apiservert-ubuntu-2204.ddtechcg.com:6443
+
+INFO: ensure the control plane entry (without port number) is added into extra subjcet alernative name(s)
+
 Enter extra subjcet alernative name(s) for certifcats to access the api-server
 (press enter to ignore, use comma between each SAN)
-: kubee-apiservert-ubuntu-2204.ddtechcg.com,192.168.131.29
+: kubee-apiservert-ubuntu-2204.ddtechcg.com,kubee-apiservert-ubuntu-2204,192.168.131.29
 
 the current node type: NONE
 
@@ -70,7 +76,7 @@ W1005 15:42:49.443772  303751 checks.go:907] detected that the sandbox image "re
 [certs] Using certificateDir folder "/etc/kubernetes/pki"
 [certs] Generating "ca" certificate and key
 [certs] Generating "apiserver" certificate and key
-[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt1-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.20 192.168.131.29]
+[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204 kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt1-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.20 192.168.131.29]
 [certs] Generating "apiserver-kubelet-client" certificate and key
 
 ...
@@ -89,7 +95,7 @@ hence:
 The certifcations will be generated not only for its node IP address, but also for the SANs:
 
 ```
-[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt1-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.20 192.168.131.29]
+[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204 kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt1-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.20 192.168.131.29]
 ```
 
 ## Add-ons
