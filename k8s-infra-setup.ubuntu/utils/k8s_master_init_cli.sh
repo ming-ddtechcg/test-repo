@@ -49,8 +49,9 @@ updateEnvironmentDirectory
 
 . ${ETC_HOME}/k8s_settings.sh
 
-OPTION_SANS="$1"
-CRI_SOCKET="$2"
+OPTION_CONTROL_PLANE_ENDPOINT="$1"
+OPTION_SANS="$2"
+CRI_SOCKET="$3"
 
 sudo echo "" > /dev/null
 echo "setup the first master node"
@@ -83,6 +84,19 @@ then
     exit 3
 fi
 
+CONTROL_PLANE_ENDPOINT_OPTION=""
+if [ "${CONTROL_PLANE_ENDPOINT}" = "" ]
+then
+    if [ "${OPTION_CONTROL_PLANE_ENDPOINT}" != "" ]
+    then
+	THE_CONTROL_PLANE_ENDPOINT=`echo ${OPTION_CONTROL_PLANE_ENDPOINT} | sed -s 's| ||g'`
+        CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${THE_CONTROL_PLANE_ENDPOINT}"
+    fi
+else
+    THE_CONTROL_PLANE_ENDPOINT=`echo ${CONTROL_PLANE_ENDPOINT} | sed -s 's| ||g'`
+    CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${THE_CONTROL_PLANE_ENDPOINT}"
+fi
+
 EXTRA_SANS_OPTION=""
 if [ "${EXTRA_SANS}" = "" ]
 then
@@ -105,6 +119,7 @@ sudo kubeadm init \
     --control-plane-endpoint="${IP_ADDRESS}" \
     --kubernetes-version="${KUBERNETS_VERSON}" \
     --cri-socket unix://${CRI_SOCKET} \
+    ${CONTROL_PLANE_ENDPOINT_OPTION} \
     ${EXTRA_SANS_OPTION} 2>&1 | sudo tee ${KUBERNETS_SETUP_LOG}
 STATUS=$?
 

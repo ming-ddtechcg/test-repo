@@ -11,15 +11,33 @@ POD_NETWORK_CIDR="10.244.0.0/16"
 SERVICE_NETWORK_CIDR="10.96.0.0/12"
 
 #
-# the extra Subject Alertnative Names (SANs)
+# Subject Alertnative Names (SANs)
 #
-# with comma to separate each SAN
+# Notes:
+# 1. use for the API Server serving certificate and be both/mixed IP addresses or/and DNS names.
+# 2. comma to separate each SAN
+#    for example:
+#        EXTRA_SANS="apiserver.example.com,1.2.3.4"
 #
 # suggestions:
 # 1. have a SAN for the apiserver access 
 # 2. have a general SAN for accessing all workers to serve the business purpose
 #
 EXTRA_SANS=""
+
+#
+# a control plane endpoint for a Virtual IP (VIP) or a load balancer
+#
+# Notes:
+# 1. it is a single entry 
+# 2. an IP address or a DNS name (FQDN and preferred)
+# 3. the format is an IP address or a DNS name (FQDN) with the port of apiserver listens (6443 as default)
+#    For example:
+#    CONTROL_PLANE_ENDPOINT="apiserver.example.com:6443"
+#    CONTROL_PLANE_ENDPOINT="1.2.3.4:6443"
+# 4. an IP address or a DNS name (FQDN) should be in the entry of "EXTRA_SANS"
+#
+CONTROL_PLANE_ENDPOINT=""
 
 #
 # the Kubernetes package version

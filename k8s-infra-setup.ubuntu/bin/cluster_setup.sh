@@ -92,14 +92,20 @@ case ${ANS} in
 
     case ${NODE_TYPE} in
     'NONE')
-        questionAndResponse "Enter extra subjcet alernative name(s) for certifcats to access the api-server\n(press enter to ignore, use comma between each SAN)\n" "skip"
+        questionAndResponse "Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number\n(press enter to ignore, use comma between each SAN)\n" "skip"
+        CONTROL_PLANE_ENDPOINT_ENTRY="${ANSWER_REQUESTION_RESPONSE}"
 
-        if [ "${ANSWER_REQUESTION_RESPONSE}" != "" ]
+        if [ "${CONTROL_PLANE_ENDPOINT_ENTRY}" != "" ]
         then
-	    ${BIN_HOME}/first_master_setup_cli.sh "${ANSWER_REQUESTION_RESPONSE}" "${CRI_SOCKET}"
-        else
-	    ${BIN_HOME}/first_master_setup_cli.sh "" "${CRI_SOCKET}"
-	fi
+            echo ""
+            echo "INFO: ensure the control plane entry (without port number) is added into extra subjcet alernative name(s)"
+            echo ""
+        fi
+
+        questionAndResponse "Enter extra subjcet alernative name(s) for certifcats to access the api-server\n(press enter to ignore, use comma between each SAN)\n" "skip"
+        EXTRA_SAN_ENTRY="${ANSWER_REQUESTION_RESPONSE}"
+
+	${BIN_HOME}/first_master_setup_cli.sh "${CONTROL_PLANE_ENDPOINT_ENTRY}" "${EXTRA_SAN_ENTRY}" "${CRI_SOCKET}"
 
         echo ""
         questionAndResponse "allow the local user (`whoami`) to access the k8s cluster (y/n)" "y n"

@@ -114,6 +114,28 @@ do
     esac
 done
 
+CONTROL_PLANE_ENDPOINT_OPTION=""
+if [ "${CONTROL_PLANE_ENDPOINT}" = "" ]
+then
+    questionAndResponse "Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number\n(press enter to ignore, use comma between each SAN)\n" "skip"
+
+    if [ "${ANSWER_REQUESTION_RESPONSE}" != "" ]
+    then
+	THE_CONTROL_PLANE_ENDPOINT=`echo ${ANSWER_REQUESTION_RESPONSE} | sed -s 's| ||g'`
+        CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${THE_CONTROL_PLANE_ENDPOINT}"
+    fi
+else
+    THE_CONTROL_PLANE_ENDPOINT=`echo ${CONTROL_PLANE_ENDPOINT} | sed -s 's| ||g'`
+    CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${THE_CONTROL_PLANE_ENDPOINT}"
+fi
+
+if [ "${CONTROL_PLANE_ENDPOINT_OPTION}" != "" ]
+then
+    echo ""
+    echo "INFO: ensure the control plane entry (without port number) is added into extra subjcet alernative name(s)"
+    echo ""
+fi
+
 EXTRA_SANS_OPTION=""
 if [ "${EXTRA_SANS}" = "" ]
 then
@@ -138,6 +160,7 @@ sudo kubeadm init \
     --control-plane-endpoint="${IP_ADDRESS}" \
     --kubernetes-version="${KUBERNETS_VERSON}" \
     --cri-socket unix://${CRI_SOCKET} \
+    ${CONTROL_PLANE_ENDPOINT_OPTION} \
     ${EXTRA_SANS_OPTION} 2>&1 | sudo tee ${KUBERNETS_SETUP_LOG}
 STATUS=$?
 
