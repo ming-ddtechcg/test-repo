@@ -40,6 +40,25 @@ EXTRA_SANS=""
 CONTROL_PLANE_ENDPOINT=""
 
 #
+# container registry to pull control plane images from
+#
+# Notes:
+# For example:
+#   REGISTRY_URL="registry.k8s.io"
+# or
+#   REGISTRY_URL="harbor.ddtechcg.com:5001"
+#
+REGISTRY_URL=""
+
+#
+# an alternative domain for services
+#
+# Notes:
+# 1. default service domain is "cluster.local"
+#
+SERVICE_DNS_DOMAIN=""
+
+#
 # the Kubernetes package version
 #
 # For example to install the Kubernetes package version 1.36:
