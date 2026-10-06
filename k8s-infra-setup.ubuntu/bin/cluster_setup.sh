@@ -92,7 +92,7 @@ case ${ANS} in
 
     case ${NODE_TYPE} in
     'NONE')
-        questionAndResponse "Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number\n(press enter to ignore, use comma between each SAN)\n" "skip"
+        questionAndResponse "Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number\n(press enter to ignore)\n" "skip"
         CONTROL_PLANE_ENDPOINT_ENTRY="${ANSWER_REQUESTION_RESPONSE}"
 
         if [ "${CONTROL_PLANE_ENDPOINT_ENTRY}" != "" ]

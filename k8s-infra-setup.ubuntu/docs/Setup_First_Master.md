@@ -29,6 +29,10 @@ Select Container Runtime Interface (CRI) runs on this node
 
 select (1/2/3/9): 1
 
+Enter Virtual IP (VIP) or Load Balancer (LB) IP address and DNS name (FQDN) with the apiserver listen port number
+(press enter to ignore)
+:
+
 Enter extra subjcet alernative name(s) for certifcats to access the api-server
 (press enter to ignore, use comma between each SAN)
 : 
