@@ -49,7 +49,7 @@ updateEnvironmentDirectory()
 # starts from here
 #
 
-updateEnvironmentDirectory()
+updateEnvironmentDirectory
 
 . ${UTILS_HOME}/questionutils.sh ""
 
