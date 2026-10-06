@@ -1,6 +1,6 @@
-# Setup the addition master node with SANs
+# Setup the addition master node with LB and SANs
 
-This is to setup the addition master node with SANs (Subject Alternative Names), and the assumption is the first master node has been setup and running with SANs.
+This is to setup the addition master node with LB (Load Balancer) and SANs (Subject Alternative Names), and the assumption is the first master node has been setup and running with LB and SANs.
 
 For setting up an addition master node with the following instruction:
 
@@ -12,7 +12,7 @@ cd ~/k8s-infra-setup.ubuntu/bin
 The following is the setup requirements:
 
 - using cri-o for the CRI (the CRI may not need to be matched the first master node. The example of setup will use cri-o same as the first master node).
-- no SANs is required for the addition node.
+- no LB and SANs is required for the addition node.
 
 and, the master node:
 
@@ -102,7 +102,7 @@ W1005 16:16:09.982161  133416 checks.go:907] detected that the sandbox image "re
 [certs] Generating "apiserver-etcd-client" certificate and key
 [certs] Generating "etcd/healthcheck-client" certificate and key
 [certs] Generating "apiserver" certificate and key
-[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt2-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.21 192.168.131.20 192.168.131.29]
+[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204 kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt2-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.21 192.168.131.29]
 
 ...
 
@@ -126,5 +126,5 @@ hence:
 The addiiton master cert creation will generate the SANs certifcations same as the first master node:
 
 ```
-[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt2-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.21 192.168.131.20 192.168.131.29]
+[certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204 kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt2-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.21 192.168.131.29]
 ```

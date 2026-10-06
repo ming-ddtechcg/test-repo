@@ -26,7 +26,7 @@ SERVICE_NETWORK_CIDR="10.96.0.0/12"
 EXTRA_SANS=""
 
 #
-# a control plane endpoint for a Virtual IP (VIP) or a load balancer
+# a control plane endpoint for a Virtual IP (VIP) or a Load Balancer (LB)
 #
 # Notes:
 # 1. it is a single entry 
