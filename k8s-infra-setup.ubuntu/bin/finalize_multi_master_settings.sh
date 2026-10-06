@@ -118,9 +118,9 @@ case ${NODE_TYPE} in
         sudo rm -f /tmp/etcd.yaml.new > /dev/null 2>&1
     fi
 
-    echo ""
-    echo "working on configurations for the apiserver"
-    ${UTILS_HOME}/k8s_san_apiserver_update.sh
+    #echo ""
+    #echo "working on configurations for the apiserver"
+    #${UTILS_HOME}/k8s_san_apiserver_update.sh
 
     echo ""
     echo "completed the multi-master finalize settings"
@@ -131,9 +131,9 @@ case ${NODE_TYPE} in
     echo ""
     echo "starting the multi-master finalize setting"
 
-    echo ""
-    echo "working on configurations for the apiserver"
-    ${UTILS_HOME}/k8s_san_apiserver_update.sh
+    #echo ""
+    #echo "working on configurations for the apiserver"
+    #${UTILS_HOME}/k8s_san_apiserver_update.sh
 
     echo ""
     echo "completed the multi-master finalize settings"
