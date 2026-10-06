@@ -81,7 +81,7 @@ do
         break
         ;;
     '9')
-        break
+        exit 0
         ;;
     esac
 done
@@ -107,7 +107,7 @@ do
         DEPLOYMENT_FILE="${CALICO_HOME}/deployments/calico-typha-${DEPLOYMENT_VERSION}.yaml"
         ;;
     '9')
-        break
+        exit 0
         ;;
     esac
 done
