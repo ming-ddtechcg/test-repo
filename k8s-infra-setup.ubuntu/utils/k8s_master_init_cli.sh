@@ -97,6 +97,11 @@ else
     CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${THE_CONTROL_PLANE_ENDPOINT}"
 fi
 
+if [ "${CONTROL_PLANE_ENDPOINT_OPTION}" = "" ]
+then
+    CONTROL_PLANE_ENDPOINT_OPTION="--control-plane-endpoint ${IP_ADDRESS}"
+fi
+
 EXTRA_SANS_OPTION=""
 if [ "${EXTRA_SANS}" = "" ]
 then
@@ -110,15 +115,42 @@ else
     EXTRA_SANS_OPTION="--apiserver-cert-extra-sans ${SANS}"
 fi
 
+REGISTRY_URL_OPTION=""
+if [ "${REGISTRY_URL}" = "" ]
+then
+    if [ "${OPTION_REGISTRY_URL}" != "" ]
+    then
+        THE_REGISTRY_URL=`echo ${OPTION_REGISTRY_URL} | sed -s 's| ||g'`
+        REGISTRY_URL_OPTION="--image-repository ${THE_REGISTRY_URL}"
+    fi
+else
+    THE_REGISTRY_URL=`echo ${REGISTRY_URL} | sed -s 's| ||g'`
+    REGISTRY_URL_OPTION="--image-repository ${THE_REGISTRY_URL}"
+fi
+
+SERVICE_DNS_DOMAIN_OPTION=""
+if [ "${SERVICE_DNS_DOMAIN}" = "" ]
+then
+    if [ "${OPTION_SERVICE_DNS_DOMAIN}" != "" ]
+    then
+        THE_SERVICE_DNS_DOMAIN=`echo ${OPTION_SERVICE_DNS_DOMAIN} | sed -s 's| ||g'`
+        SERVICE_DNS_DOMAIN_OPTION="--service-dns-domain ${THE_SERVICE_DNS_DOMAIN}"
+    fi
+else
+    THE_SERVICE_DNS_DOMAIN=`echo ${SERVICE_DNS_DOMAIN} | sed -s 's| ||g'`
+    SERVICE_DNS_DOMAIN_OPTION="--service-dns-domain ${THE_SERVICE_DNS_DOMAIN}"
+fi
+
 echo ""
 
 sudo kubeadm init \
-    --image-repository="${REGISTRY_URL}" \
-    --pod-network-cidr="${POD_NETWORK_CIDR}" \
-    --service-cidr="${SERVICE_NETWORK_CIDR}" \
-    --control-plane-endpoint="${IP_ADDRESS}" \
-    --kubernetes-version="${KUBERNETS_VERSON}" \
+    --pod-network-cidr "${POD_NETWORK_CIDR}" \
+    --service-cidr "${SERVICE_NETWORK_CIDR}" \
+    --kubernetes-version "${KUBERNETS_VERSON}" \
+    --upload-certs \
     --cri-socket unix://${CRI_SOCKET} \
+    ${SERVICE_DNS_DOMAIN_OPTION} \
+    ${REGISTRY_URL_OPTION} \
     ${CONTROL_PLANE_ENDPOINT_OPTION} \
     ${EXTRA_SANS_OPTION} 2>&1 | sudo tee ${KUBERNETS_SETUP_LOG}
 STATUS=$?
