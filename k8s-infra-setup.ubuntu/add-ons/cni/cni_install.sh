@@ -63,7 +63,7 @@ do
     echo ""
     echo "9. return"
     echo ""
-    questionAndResponse "select (1/9)" "1 9"
+    questionAndResponse "select (1/8/9)" "1 8 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
