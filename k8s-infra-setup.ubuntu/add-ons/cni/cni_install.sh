@@ -59,15 +59,20 @@ do
     echo "Select one of the following Container Network Interface (CNI)"
     echo "============================================================="
     echo "1. calico"
+    echo "1. cilium"
     echo "8. flannel"
     echo ""
     echo "9. return"
     echo ""
-    questionAndResponse "select (1/8/9)" "1 8 9"
+    questionAndResponse "select (1/2/8/9)" "1 2 8 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
         ${CNI_HOME}/calico/calico_install.sh
+        continue
+        ;;
+    '2')
+        ${CNI_HOME}/cilium/cilium_install.sh
         continue
         ;;
     '8')
