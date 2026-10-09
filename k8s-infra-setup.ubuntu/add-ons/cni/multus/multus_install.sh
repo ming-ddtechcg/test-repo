@@ -7,7 +7,7 @@ INFRA_HOME="${K8S_INFRA_HOME}/infra"
 UTILS_HOME="${K8S_INFRA_HOME}/utils"
 ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
 CNI_HOME="${ADD_ONS_HOME}/cni"
-CALICO_HOME="${CNI_HOME}/calico"
+MULTUS_HOME="${CNI_HOME}/multus"
 
 EXECUTION_DIR=`dirname $0`
 
@@ -37,7 +37,7 @@ updateEnvironmentDirectory()
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             CNI_HOME="${ADD_ONS_HOME}/cni"
-            CALICO_HOME="${CNI_HOME}/calico"
+            MULTUS_HOME="${CNI_HOME}/calico"
             break
         fi
 
@@ -56,61 +56,7 @@ updateEnvironmentDirectory
 . ${UTILS_HOME}/questionutils.sh ""
 
 DEPLOYMENT_MODE=""
-DEPLOYMENT_VERSION=""
-DEPLOYMENT_FILE=""
-
-while true
-do
-    echo ""
-    echo "Select Calico version from the following"
-    echo "=============================================="
-    echo "1. 3.29"
-    echo "2. 3.33"
-    echo ""
-    echo "9. return"
-    echo ""
-    questionAndResponse "select (1/2/9)" "1 2 9"
-
-    case ${ANSWER_REQUESTION_RESPONSE} in
-    '1')
-        DEPLOYMENT_VERSION="3.29"
-        break
-        ;;
-    '2')
-        DEPLOYMENT_VERSION="3.33"
-        break
-        ;;
-    '9')
-        exit 0
-        ;;
-    esac
-done
-
-while true
-do
-    echo ""
-    echo "Select Calico one of the following deployments"
-    echo "=============================================="
-    echo "1. 50 nodes or less"
-    echo "2. more than 50 nodes"
-    echo ""
-    echo "9. return"
-    echo ""
-    questionAndResponse "select (1/2/9)" "1 2 9"
-
-    case ${ANSWER_REQUESTION_RESPONSE} in
-    '1')
-        DEPLOYMENT_FILE="${CALICO_HOME}/deployments/calico-${DEPLOYMENT_VERSION}.yaml"
-        break
-        ;;
-    '2')
-        DEPLOYMENT_FILE="${CALICO_HOME}/deployments/calico-typha-${DEPLOYMENT_VERSION}.yaml"
-        ;;
-    '9')
-        exit 0
-        ;;
-    esac
-done
+DEPLOYMENT_FILE="${MULTUS_HOME}/deployments/multus-daemonset.yml"
 
 while true
 do
@@ -140,7 +86,7 @@ do
 done
 
 echo ""
-echo "start the CNI (calico) installation"
+echo "start the CNI (multus) installation"
 
 case ${DEPLOYMENT_MODE} in
 'root_on_master')
@@ -152,9 +98,9 @@ case ${DEPLOYMENT_MODE} in
 esac
 
 echo ""
-echo "completed the CNI (calico) installation"
+echo "completed the CNI (multus) installation"
 echo ""
-echo "to remove the CNI (calico) installation with the following:"
+echo "to remove the CNI (multus) installation with the following:"
 case ${DEPLOYMENT_MODE} in
 'root_on_master')
     echo "sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${DEPLOYMENT_FILE}"

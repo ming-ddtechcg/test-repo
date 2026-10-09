@@ -60,11 +60,13 @@ do
     echo "============================================================="
     echo "1. calico"
     echo "2. cilium"
+    echo "3. multus"
+    echo ""
     echo "8. flannel"
     echo ""
     echo "9. return"
     echo ""
-    questionAndResponse "select (1/2/8/9)" "1 2 8 9"
+    questionAndResponse "select (1/2/3/8/9)" "1 2 3 8 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
@@ -72,6 +74,10 @@ do
         continue
         ;;
     '2')
+        ${CNI_HOME}/multus/multus_install.sh
+        continue
+        ;;
+    '3')
         ${CNI_HOME}/cilium/cilium_install.sh
         continue
         ;;
