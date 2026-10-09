@@ -12,7 +12,7 @@ SEE_SRC="false"
 
 #ip r | grep "/24" | awk '{ print $NF }'
 
-for each_element in `ip r | grep "/24"`
+for each_element in `ip r | grep "/24" | grep "scope" | grep "link" | grep "src" | egrep -v "cilium|cni|docker"`
 do
     if [ "${each_element}" = "" ]
     then
