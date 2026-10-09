@@ -129,13 +129,13 @@ echo "start the CNI (cilium) installation"
 case ${DEPLOYMENT_MODE} in
 'root_on_master')
     sudo helm install cilium oci://quay.io/cilium/charts/cilium \
-        ${DEPLOYMENT_VERSION} \
+        --version ${DEPLOYMENT_VERSION} \
         --kubeconfig=/etc/kubernetes/admin.conf \
         --namespace kube-system
     ;;
 'user_with_kubeconfig')
     helm install cilium oci://quay.io/cilium/charts/cilium \
-        ${DEPLOYMENT_VERSION} \
+        --version ${DEPLOYMENT_VERSION} \
         --namespace kube-system
     ;;
 esac
