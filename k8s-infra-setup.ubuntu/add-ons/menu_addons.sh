@@ -59,14 +59,21 @@ do
     echo "Select one of the following add-ons"
     echo "============================================================="
     echo "1. Container Network Interface (CNI)"
+    echo "2. AutoScale"
     echo ""
     echo "9. exit"
     echo ""
-    questionAndResponse "select (1/9)" "1 9"
+    questionAndResponse "select (1/2/9)" "1 2 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
         ${CNI_HOME}/cni_install.sh
+        continue
+        ;;
+    '2')
+        echo ""
+        echo "Pending..."
+        echo ""
         continue
         ;;
     '9')
