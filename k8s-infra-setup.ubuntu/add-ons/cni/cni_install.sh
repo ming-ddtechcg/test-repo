@@ -59,7 +59,7 @@ do
     echo "Select one of the following Container Network Interface (CNI)"
     echo "============================================================="
     echo "1. calico"
-    echo "1. cilium"
+    echo "2. cilium"
     echo "8. flannel"
     echo ""
     echo "9. return"
