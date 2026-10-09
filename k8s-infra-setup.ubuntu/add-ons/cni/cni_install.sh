@@ -74,11 +74,11 @@ do
         continue
         ;;
     '2')
-        ${CNI_HOME}/multus/multus_install.sh
+        ${CNI_HOME}/cilium/cilium_install.sh
         continue
         ;;
     '3')
-        ${CNI_HOME}/cilium/cilium_install.sh
+        ${CNI_HOME}/multus/multus_install.sh
         continue
         ;;
     '8')
