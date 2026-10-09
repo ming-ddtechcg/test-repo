@@ -70,10 +70,11 @@ downloadFlannelCniPlugins()
 
 updateEnvironmentDirectory
 
-for arch in arm64 amd64
-do
-    curl -L -s https://github.com/containernetworking/plugins/releases/download/v1.7.1/cni-plugins-linux-$arch-v1.7.1.tgz -o ${CNI_PLUGINS_HOME}/cni-plugins-linux-$arch-v1.7.1.tgz
-done
+ARCH="$1"
+
+curl -L -s \
+    https://github.com/ming-ddtechcg/k8s-utils/releases/download/flannel-v1.7.1/cni-plugins-linux-${ARCH}-v1.7.1.tgz  \
+    -o ${CNI_PLUGINS_HOME}/cni-plugins-linux-${ARCH}-v1.7.1.tgz
 
 exit 0
 

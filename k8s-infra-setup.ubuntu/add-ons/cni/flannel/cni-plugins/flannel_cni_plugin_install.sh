@@ -86,10 +86,13 @@ CNI_PLUGINS_FILE="${CNI_PLUGINS_HOME}/cni-plugins-linux-$ARCH-v1.7.1.tgz"
 
 if [ ! -f "${CNI_PLUGINS_FILE}" ]
 then
-    ${CNI_PLUGINS_HOME}/flannel_cni_plugin_downloads.sh
+    ${CNI_PLUGINS_HOME}/flannel_cni_plugin_downloads.sh "${ARCH}"
 fi
 
-sudo tar -C /opt/cni/bin -xzf cni-plugins-linux-$ARCH-v1.7.1.tgz
+if [ -f "${CNI_PLUGINS_HOME}/cni-plugins-linux-$ARCH-v1.7.1.tgz" ]
+then
+    sudo tar -C /opt/cni/bin -xzf ${CNI_PLUGINS_HOME}/cni-plugins-linux-$ARCH-v1.7.1.tgz
+fi
 
 exit 0
 
