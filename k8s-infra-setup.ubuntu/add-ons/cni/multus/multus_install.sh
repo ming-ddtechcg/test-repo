@@ -37,7 +37,7 @@ updateEnvironmentDirectory()
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             CNI_HOME="${ADD_ONS_HOME}/cni"
-            MULTUS_HOME="${CNI_HOME}/calico"
+            MULTUS_HOME="${CNI_HOME}/multus"
             break
         fi
 
