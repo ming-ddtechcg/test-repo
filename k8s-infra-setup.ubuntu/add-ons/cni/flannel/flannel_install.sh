@@ -8,6 +8,7 @@ UTILS_HOME="${K8S_INFRA_HOME}/utils"
 ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
 CNI_HOME="${ADD_ONS_HOME}/cni"
 FLANNEL_HOME="${CNI_HOME}/flannel"
+CNI_PLUGINS_HOME="${FLANNEL_HOME}/cni-plugins"
 
 EXECUTION_DIR=`dirname $0`
 
@@ -38,6 +39,7 @@ updateEnvironmentDirectory()
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             CNI_HOME="${ADD_ONS_HOME}/cni"
             FLANNEL_HOME="${CNI_HOME}/flannel"
+            CNI_PLUGINS_HOME="${FLANNEL_HOME}/cni-plugins"
             break
         fi
 
@@ -87,6 +89,10 @@ done
 
 echo ""
 echo "start the CNI (flannel) installation"
+
+echo ""
+echo "install the flannel cni-plugins"
+${CNI_PLUGINS_HOME}/flannel_cni_plugin_install.sh
 
 case ${DEPLOYMENT_MODE} in
 'root_on_master')
