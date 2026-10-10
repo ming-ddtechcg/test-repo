@@ -92,31 +92,6 @@ do
             --kubeconfig=/etc/kubernetes/admin.conf \
             -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml
 
-        DATA=`sudo kubectl create token kubernetes-dashboard \
-            --bound-object-kind Secret \
-            --bound-object-name kubernetes-dashboard-token \
-            --kubeconfig=/etc/kubernetes/admin.conf \
-            -n kubernetes-dashboard`
-    
-        if [ "${DATA}" != "" ]
-        then
-            TOKEN=`echo "${DATA}" | base64 --wrap=0`
-
-            sudo kubectl get secret/kubernetes-dashboard-token -o json \
-                --kubeconfig=/etc/kubernetes/admin.conf \
-                -n kubernetes-dashboard \
-                | jq -r '.data.token="'${TOKEN}'"' \
-                > /tmp/kubernetes-dashboard-token.json
-
-            if [ -s "/tmp/kubernetes-dashboard-token.json" ]
-            then
-                sudo kubectl apply -f /tmp/kubernetes-dashboard-token.json \
-                    --kubeconfig=/etc/kubernetes/admin.conf
-
-                rm -f /tmp/kubernetes-dashboard-token.json > /dev/null 2>&1
-            fi
-        fi
-
         UNINSTALL_PROCEDURE="sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml"
         break
         ;;
@@ -124,28 +99,6 @@ do
         DEPLOYMENT_MODE="user_with_kubeconfig"
         kubectl apply \
             -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml 
-
-        DATA=`kubectl create token kubernetes-dashboard \
-            --bound-object-kind Secret \
-            --bound-object-name kubernetes-dashboard-token \
-            -n kubernetes-dashboard`
-    
-        if [ "${DATA}" != "" ]
-        then
-            TOKEN=`echo "${DATA}" | base64 --wrap=0`
-
-            kubectl get secret/kubernetes-dashboard-token -o json \
-                -n kubernetes-dashboard \
-                | jq -r '.data.token="'${TOKEN}'"' \
-                > /tmp/kubernetes-dashboard-token.json
-
-            if [ -s "/tmp/kubernetes-dashboard-token.json" ]
-            then
-                kubectl apply -f /tmp/kubernetes-dashboard-token.json
-
-                rm -f /tmp/kubernetes-dashboard-token.json > /dev/null 2>&1
-            fi
-        fi
 
         UNINSTALL_PROCEDURE="kubectl delete -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml"
         break
