@@ -7,13 +7,13 @@ INFRA_HOME="${K8S_INFRA_HOME}/infra"
 UTILS_HOME="${K8S_INFRA_HOME}/utils"
 ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
 VISUAL_AND_CONTROL_HOME="${ADD_ONS_HOME}/visual-and-control"
-DASHBOARD_HOME="${VISUAL_AND_CONTROL_HOME}/dashboard"
+HEADLAMP_HOME="${VISUAL_AND_CONTROL_HOME}/headlamp"
 
 EXECUTION_DIR=`dirname $0`
 
 PRG="$0"
 
-NAMESPACE="kubernetes-dashboard"
+NAMESPACE="kube-system"
 
 
 
@@ -39,7 +39,7 @@ updateEnvironmentDirectory()
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             VISUAL_AND_CONTROL_HOME="${ADD_ONS_HOME}/visual-and-control"
-            DASHBOARD_HOME="${VISUAL_AND_CONTROL_HOME}/dashboard"
+            HEADLAMP_HOME="${VISUAL_AND_CONTROL_HOME}/headlamp"
             break
         fi
 
@@ -60,7 +60,7 @@ updateEnvironmentDirectory
 questionAndResponse "Ensure KUBECONFIG has been set. Press enter to continue or Control-C to exit" "skip"
 
 SECRET_NAME=`kubectl get secrets -n ${NAMESPACE} -o json \
-    | jq -r '.items[] | select( .metadata.annotations != null and .metadata.annotations."kubernetes.io/service-account.name" != null and .metadata.annotations."kubernetes.io/service-account.name" == "kubernetes-dashboard" ) | .metadata.name'`
+    | jq -r '.items[] | select( .metadata.annotations != null and .metadata.annotations."kubernetes.io/service-account.name" != null and .metadata.annotations."kubernetes.io/service-account.name" == "headlamp-admin" ) | .metadata.name'`
 
 if [ "${SECRET_NAME}" != "" ]
 then
