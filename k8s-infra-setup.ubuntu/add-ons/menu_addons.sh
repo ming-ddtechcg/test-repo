@@ -7,6 +7,7 @@ INFRA_HOME="${K8S_INFRA_HOME}/infra"
 UTILS_HOME="${K8S_INFRA_HOME}/utils"
 ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
 CNI_HOME="${ADD_ONS_HOME}/cni"
+VAC_HOME="${ADD_ONS_HOME}/visual-and-control"
 
 EXECUTION_DIR=`dirname $0`
 
@@ -36,6 +37,7 @@ updateEnvironmentDirectory()
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             CNI_HOME="${ADD_ONS_HOME}/cni"
+            VAC_HOME="${ADD_ONS_HOME}/visual-and-control"
             break
         fi
 
@@ -60,10 +62,11 @@ do
     echo "============================================================="
     echo "1. Container Network Interface (CNI)"
     echo "2. AutoScale"
+    echo "3. Visualization & Control"
     echo ""
     echo "9. exit"
     echo ""
-    questionAndResponse "select (1/2/9)" "1 2 9"
+    questionAndResponse "select (1/2/3/9)" "1 2 3 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
@@ -74,6 +77,10 @@ do
         echo ""
         echo "Pending..."
         echo ""
+        continue
+        ;;
+    '3')
+        ${VAC_HOME}/vac_install.sh
         continue
         ;;
     '9')
