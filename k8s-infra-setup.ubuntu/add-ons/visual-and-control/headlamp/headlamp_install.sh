@@ -7,7 +7,7 @@ INFRA_HOME="${K8S_INFRA_HOME}/infra"
 UTILS_HOME="${K8S_INFRA_HOME}/utils"
 ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
 VISUAL_AND_CONTROL_HOME="${ADD_ONS_HOME}/visual-and-control"
-DASHBOARD_HOME="${VISUAL_AND_CONTROL_HOME}/dashboard"
+HEADLAMP_HOME="${VISUAL_AND_CONTROL_HOME}/headlamp"
 
 EXECUTION_DIR=`dirname $0`
 
@@ -37,7 +37,7 @@ updateEnvironmentDirectory()
             UTILS_HOME="${K8S_INFRA_HOME}/utils"
             ADD_ONS_HOME="${K8S_INFRA_HOME}/add-ons"
             VISUAL_AND_CONTROL_HOME="${ADD_ONS_HOME}/visual-and-control"
-            DASHBOARD_HOME="${VISUAL_AND_CONTROL_HOME}/dashboard"
+            HEADLAMP_HOME="${VISUAL_AND_CONTROL_HOME}/headlamp"
             break
         fi
 
@@ -57,7 +57,7 @@ updateEnvironmentDirectory
 
 DEPLOYMENT_MODE=""
 
-questionAndResponse "Proceed the Kubernetes Dashboard installation (y/n)" "y n"
+questionAndResponse "Proceed the Headlamp installation (y/n)" "y n"
 
 case ${ANSWER_REQUESTION_RESPONSE} in
 'y')
@@ -88,66 +88,28 @@ do
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
         DEPLOYMENT_MODE="root_on_master"
+
         sudo kubectl apply \
             --kubeconfig=/etc/kubernetes/admin.conf \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-serviceaccount.yaml
 
-        DATA=`sudo kubectl create token kubernetes-dashboard \
-            --bound-object-kind Secret \
-            --bound-object-name kubernetes-dashboard-token \
+        sudo kubectl apply \
             --kubeconfig=/etc/kubernetes/admin.conf \
-            -n kubernetes-dashboard`
-    
-        if [ "${DATA}" != "" ]
-        then
-            TOKEN=`echo "${DATA}" | base64 --wrap=0`
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp.yaml
 
-            sudo kubectl get secret/kubernetes-dashboard-token -o json \
-                --kubeconfig=/etc/kubernetes/admin.conf \
-                -n kubernetes-dashboard \
-                | jq -r '.data.token="'${TOKEN}'"' \
-                > /tmp/kubernetes-dashboard-token.json
-
-            if [ -s "/tmp/kubernetes-dashboard-token.json" ]
-            then
-                sudo kubectl apply -f /tmp/kubernetes-dashboard-token.json \
-                    --kubeconfig=/etc/kubernetes/admin.conf
-
-                rm -f /tmp/kubernetes-dashboard-token.json > /dev/null 2>&1
-            fi
-        fi
-
-        UNINSTALL_PROCEDURE="sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml"
+        UNINSTALL_PROCEDURE="sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp.yaml\nsudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-serviceaccount.yaml"
         break
         ;;
     '2')
         DEPLOYMENT_MODE="user_with_kubeconfig"
+
         kubectl apply \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml 
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-serviceaccount.yaml
 
-        DATA=`kubectl create token kubernetes-dashboard \
-            --bound-object-kind Secret \
-            --bound-object-name kubernetes-dashboard-token \
-            -n kubernetes-dashboard`
-    
-        if [ "${DATA}" != "" ]
-        then
-            TOKEN=`echo "${DATA}" | base64 --wrap=0`
+        kubectl apply \
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp.yaml 
 
-            kubectl get secret/kubernetes-dashboard-token -o json \
-                -n kubernetes-dashboard \
-                | jq -r '.data.token="'${TOKEN}'"' \
-                > /tmp/kubernetes-dashboard-token.json
-
-            if [ -s "/tmp/kubernetes-dashboard-token.json" ]
-            then
-                kubectl apply -f /tmp/kubernetes-dashboard-token.json
-
-                rm -f /tmp/kubernetes-dashboard-token.json > /dev/null 2>&1
-            fi
-        fi
-
-        UNINSTALL_PROCEDURE="kubectl delete -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard.yaml"
+        UNINSTALL_PROCEDURE="kubectl delete -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp.yaml\nkubectl delete -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-serviceaccount.yaml"
         break
         ;;
     '3')
@@ -156,26 +118,21 @@ do
     esac
 done
 
-questionAndResponse "Allow the Kubernetes Dashboard access with the cluster admin role (y/n)" "y n"
+questionAndResponse "Allow headlamp to access with the cluster admin role (y/n)" "y n"
 
 case ${ANSWER_REQUESTION_RESPONSE} in
 'y')
     case ${DEPLOYMENT_MODE} in
     'root_on_master')
-        sudo kubectl delete \
-            --kubeconfig=/etc/kubernetes/admin.conf \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard-cluster-admin-role.yaml \
-            > /dev/null 2>&1
         sudo kubectl apply \
             --kubeconfig=/etc/kubernetes/admin.conf \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard-cluster-admin-role.yaml
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-cluster-admin-role.yaml
+        UNINSTALL_PROCEDURE="sudo kubectl delete --kubeconfig=/etc/kubernetes/admin.conf -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-cluster-admin-role.yaml\n${UNINSTALL_PROCEDURE}"
         ;;
     'user_with_kubeconfig')
-        kubectl delete \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard-cluster-admin-role.yaml \
-            > /dev/null 2>&1
         kubectl apply \
-            -f ${DASHBOARD_HOME}/deployments/kubernetes-dashboard-cluster-admin-role.yaml
+            -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-cluster-admin-role.yaml
+        UNINSTALL_PROCEDURE="kubectl delete -f ${HEADLAMP_HOME}/deployments/kubernetes-headlamp-cluster-admin-role.yaml\n${UNINSTALL_PROCEDURE}"
         ;;
     esac
     ;;
@@ -186,12 +143,12 @@ esac
 
 
 echo ""
-echo "completed the dashboard installation"
+echo "completed the headlamp installation"
 
 if [ "${UNINSTALL_PROCEDURE}" != "" ]
 then
     echo ""
-    echo "to remove the dashboard installation with the following:"
+    echo "to remove the headlamp installation with the following:"
     echo "${UNINSTALL_PROCEDURE}"
 fi
 

@@ -59,14 +59,19 @@ do
     echo "Select one of the following Visualization & Control"
     echo "============================================================="
     echo "1. dashboard"
+    echo "2. headlamp"
     echo ""
     echo "9. return"
     echo ""
-    questionAndResponse "select (1/9)" "1 9"
+    questionAndResponse "select (1/2/9)" "1 2 9"
 
     case ${ANSWER_REQUESTION_RESPONSE} in
     '1')
         ${VAC_HOME}/dashboard/dashboard_install.sh
+        continue
+        ;;
+    '2')
+        ${VAC_HOME}/headlamp/headlamp_install.sh
         continue
         ;;
     '9')
