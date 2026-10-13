@@ -128,3 +128,11 @@ The addiiton master cert creation will generate the SANs certifcations same as t
 ```
 [certs] apiserver serving cert is signed for DNS names [kubee-apiservert-ubuntu-2204 kubee-apiservert-ubuntu-2204.ddtechcg.com kubee-mnt2-ubuntu-2204 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.131.21 192.168.131.29]
 ```
+
+## Adjust all master/control planes nodes
+While a new master/control plane joined in the cluster, the existing api-server/ETCD configurations are required to be reconfigured for the new node.
+
+The document is avaiable is at:
+
+[Finalize Multi Master/Control plane Setup](Finalize_Multi_Master_setting.md)
+
