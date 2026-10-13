@@ -97,3 +97,15 @@ For testing the ingress, a demo deployment is available at:
 [test-webservice](https://github.com/ming-ddtechcg/k8s-utils/tree/main/k8s-tests/ingress-nginx-tester)
 
 
+## Notes
+
+1. HAProxy api-server setup also works for the single control plane/master node model.
+2. HAProxy routing for the worker loads may apply the static route with the layer 4 cookie setup, an example likes:
+   ```console
+	backend k8s-http-back
+        	mode http
+        	balance roundrobin
+                cookie SERVERID insert indirect nocache
+        	server k8s-worker-http-01 192.168.131.23:80 check cookie k8s-worker-web-1
+        	server k8s-worker-http-02 192.168.131.24:80 check cookie k8s-worker-web-2
+   ```
