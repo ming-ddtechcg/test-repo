@@ -20,7 +20,7 @@ The package is to demostrate the the cluster setup in the following setup:
 
 The example of the multi masters and multi workers that configured by this package:
 
-[multi masters/multi workers](docs/k8s_v1.36.5_infrastructure_on_prem.PNG)
+![multi masters/multi workers](docs/k8s_v1.36.5_infrastructure_on_prem.PNG)
 
 ## Platform to be supported
 
