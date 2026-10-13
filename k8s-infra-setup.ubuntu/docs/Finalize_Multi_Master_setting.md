@@ -10,3 +10,20 @@ for the following adjustments that provided from the script:
 1. the peer discovery for all ETCDs so that all ETCDs in different node can sync or be synced to/from other peers.
 2. the communication between api-server and ETCD is not limited inside the node.  In other words, an api-servers can rearch an ETCD from another node as well.
 
+likes the following execution:
+
+```console
+$ ./finalize_multi_master_settings.sh
+
+starting the multi-master finalize setting
+
+collecting master information
+
+working on kube-apiserver.yaml
+
+working on etcd.yaml
+
+completed the multi-master finalize settings
+
+```
+
