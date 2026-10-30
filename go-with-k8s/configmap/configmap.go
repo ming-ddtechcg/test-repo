@@ -40,7 +40,7 @@ func (configMap *ConfigMap) accessConfigMap(cm *corev1.ConfigMap) {
 	}
 }
 
-func (configMap *ConfigMap) retrieveAllConfigMap(namespace *string, listOptions *metav1.ListOptions) ([]corev1.ConfigMap, error) {
+func (configMap *ConfigMap) retrieveAllConfigMaps(namespace *string, listOptions *metav1.ListOptions) ([]corev1.ConfigMap, error) {
 
 	list, err := configMap.Clientset.CoreV1().ConfigMaps(*namespace).List(context.Background(), *listOptions)
 	if err != nil {
@@ -55,7 +55,7 @@ func (configMap *ConfigMap) retrieveConfigMapWithSpecificAnnonations(annontation
 	// annonation is no option in metav1.ListOptions{}
 	listOptions := &metav1.ListOptions{}
 
-	list, err := configMap.retrieveAllConfigMap(&namespace, listOptions)
+	list, err := configMap.retrieveAllConfigMaps(&namespace, listOptions)
 
 	if err != nil {
 		return nil, err
@@ -96,6 +96,8 @@ func (configMap *ConfigMap) retrieveConfigMapWithSpecificLabels(labels, namespac
 	return list.Items, nil
 }
 
+// ---
+
 func (configMap *ConfigMap) listAllConfigMap(call bool) {
 	if !call {
 		return
@@ -104,7 +106,7 @@ func (configMap *ConfigMap) listAllConfigMap(call bool) {
 	namespace := metav1.NamespaceAll
 	listOptions := &metav1.ListOptions{}
 
-	list, err := configMap.retrieveAllConfigMap(&namespace, listOptions)
+	list, err := configMap.retrieveAllConfigMaps(&namespace, listOptions)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching configmap: %v\n", err)
 		return
@@ -137,12 +139,26 @@ func (configMap *ConfigMap) createATestConfigMap(call bool, configMapName, names
 		Data: map[string]string{"LOG_LEVEL": "debug"},
 	}
 
-	_, err := configMap.Clientset.CoreV1().ConfigMaps("dev").Create(context.Background(), cm, metav1.CreateOptions{})
+	_, err := configMap.Clientset.CoreV1().ConfigMaps(namespace).Create(context.Background(), cm, metav1.CreateOptions{})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error creating configmap: %v\n", err)
 		return
 	} else {
 		fmt.Fprintf(os.Stderr, "a configmap (%v) is created\n", configMapName)
+	}
+}
+
+func (configMap *ConfigMap) deleteATestConfigMap(call bool, configMapName, namespace string) {
+	if !call {
+		return
+	}
+
+	err := configMap.Clientset.CoreV1().ConfigMaps(namespace).Delete(context.Background(), configMapName, metav1.DeleteOptions{})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error deleting configmap: %v\n", err)
+		return
+	} else {
+		fmt.Fprintf(os.Stderr, "a configmap (%v) is deleted\n", configMapName)
 	}
 }
 
@@ -211,7 +227,9 @@ func (configMap *ConfigMap) Workon() {
 
 	configMap.getConfigMapWithSpecificAnnonations(false, "meta.helm.sh/release-name=tempo,meta.helm.sh/release-namespace=opentelemetry", "")
 
-	configMap.getConfigMapWithSpecificLabels(true, "app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=loki", "")
+	configMap.getConfigMapWithSpecificLabels(false, "app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=loki", "")
+
+	configMap.deleteATestConfigMap(false, "test", "dev")
 
 	fmt.Println("-----------------------------\n")
 }

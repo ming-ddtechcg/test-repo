@@ -8,7 +8,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"example.com/myapp/configmap"
+	// "example.com/myapp/configmap"
+	"example.com/myapp/secret"
 )
 
 func buildConfig() (*rest.Config, error) {
@@ -36,10 +37,15 @@ func main() {
 		fmt.Fprintf(os.Stderr, "kubernetes client is created\n")
 	}
 
-	configmap := &configmap.ConfigMap{
+	// configmap section
+	//configmap := &configmap.ConfigMap{
+	// 	Clientset: clientset,
+	// }
+	// configmap.Workon()
+
+	// secret section
+	secret := &secret.Secret{
 		Clientset: clientset,
 	}
-
-	configmap.Workon()
-
+	secret.Workon()
 }
