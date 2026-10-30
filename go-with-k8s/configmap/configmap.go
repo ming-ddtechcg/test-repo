@@ -2,6 +2,7 @@ package configmap
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -40,9 +41,19 @@ func (configMap *ConfigMap) accessConfigMap(cm *corev1.ConfigMap) {
 	}
 }
 
-func (configMap *ConfigMap) retrieveAllConfigMaps(namespace *string, listOptions *metav1.ListOptions) ([]corev1.ConfigMap, error) {
+func (configMap *ConfigMap) retrieveAllConfigMapItem(namespace *string, listOptions *metav1.ListOptions) (*corev1.ConfigMapList, error) {
 
 	list, err := configMap.Clientset.CoreV1().ConfigMaps(*namespace).List(context.Background(), *listOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
+func (configMap *ConfigMap) retrieveAllConfigMaps(namespace *string, listOptions *metav1.ListOptions) ([]corev1.ConfigMap, error) {
+
+	list, err := configMap.retrieveAllConfigMapItem(namespace, listOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -94,6 +105,16 @@ func (configMap *ConfigMap) retrieveConfigMapWithSpecificLabels(labels, namespac
 	}
 
 	return list.Items, nil
+}
+
+func (configMap *ConfigMap) retrieveConfigMapByName(configMapName, namespace string) (*corev1.ConfigMap, error) {
+
+	cm, err := configMap.Clientset.CoreV1().ConfigMaps(namespace).Get(context.Background(), configMapName, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	return cm, nil
 }
 
 // ---
@@ -167,7 +188,7 @@ func (configMap *ConfigMap) getConfigMapByName(call bool, configMapName, namespa
 		return
 	}
 
-	cm, err := configMap.Clientset.CoreV1().ConfigMaps(namespace).Get(context.Background(), configMapName, metav1.GetOptions{})
+	cm, err := configMap.retrieveConfigMapByName(configMapName, namespace)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching configmap: %v\n", err)
 		return
@@ -214,10 +235,60 @@ func (configMap *ConfigMap) getConfigMapWithSpecificLabels(call bool, labels, na
 	}
 }
 
-func (configMap *ConfigMap) Workon() {
+func (configMap *ConfigMap) printAConfigMapIntoJson(call bool, configMapName, namespace string) {
+	if !call {
+		return
+	}
 
-	fmt.Println("")
-	fmt.Println("-----------------------------\n")
+	cm, err := configMap.retrieveConfigMapByName(configMapName, namespace)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching configmap: %v\n", err)
+		return
+	}
+
+	out, err := json.MarshalIndent(cm, "", "  ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error to convert a configmap into json: %v\n", err)
+	}
+
+	fmt.Println(string(out))
+}
+
+func (configMap *ConfigMap) printListConfigMapIntoJson(call, withItem bool, namespace string) {
+	if !call {
+		return
+	}
+
+	var err error
+	var list any
+
+	if withItem {
+		list, err = configMap.retrieveAllConfigMapItem(&namespace, &metav1.ListOptions{})
+	} else {
+		list, err = configMap.retrieveAllConfigMaps(&namespace, &metav1.ListOptions{})
+	}
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching configmap list: %v\n", err)
+		return
+	}
+
+	out, err := json.MarshalIndent(list, "", "  ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error to convert list configmap into json: %v\n", err)
+	}
+
+	fmt.Println(string(out))
+}
+
+func (configMap *ConfigMap) Workon(call bool) {
+	if !call {
+		return
+	}
+
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "configmap section\n")
+	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 
 	configMap.createATestConfigMap(false, "test", "dev")
 
@@ -229,7 +300,11 @@ func (configMap *ConfigMap) Workon() {
 
 	configMap.getConfigMapWithSpecificLabels(false, "app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=loki", "")
 
-	configMap.deleteATestConfigMap(false, "test", "dev")
+	configMap.printAConfigMapIntoJson(false, "test", "dev")
 
-	fmt.Println("-----------------------------\n")
+	configMap.printListConfigMapIntoJson(true, false, "dev")
+
+	configMap.deleteATestConfigMap(true, "test", "dev")
+
+	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 }

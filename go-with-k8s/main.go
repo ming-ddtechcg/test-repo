@@ -8,7 +8,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	// "example.com/myapp/configmap"
+	"example.com/myapp/configmap"
 	"example.com/myapp/secret"
 )
 
@@ -38,14 +38,14 @@ func main() {
 	}
 
 	// configmap section
-	//configmap := &configmap.ConfigMap{
-	// 	Clientset: clientset,
-	// }
-	// configmap.Workon()
+	configmap := &configmap.ConfigMap{
+		Clientset: clientset,
+	}
+	configmap.Workon(true)
 
 	// secret section
 	secret := &secret.Secret{
 		Clientset: clientset,
 	}
-	secret.Workon()
+	secret.Workon(false)
 }

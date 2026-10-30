@@ -100,16 +100,20 @@ func (secret *Secret) deleteATestSecret(call bool, secretName, namespace string)
 	}
 }
 
-func (secret *Secret) Workon() {
+func (secret *Secret) Workon(call bool) {
+	if !call {
+		return
+	}
 
-	fmt.Println("")
-	fmt.Println("-----------------------------\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "secret section\n")
+	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 
-	secret.createATestSecret(true, "test", "dev")
+	secret.createATestSecret(false, "test", "dev")
 
 	secret.listAllSecrets(false)
 
 	secret.deleteATestSecret(false, "test", "dev")
 
-	fmt.Println("-----------------------------\n")
+	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 }
