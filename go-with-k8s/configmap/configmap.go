@@ -117,6 +117,13 @@ func (configMap *ConfigMap) retrieveConfigMapByName(configMapName, namespace str
 	return cm, nil
 }
 
+func (configMap *ConfigMap) updateConfigMapWithConfigMap(namespace string, cm *corev1.ConfigMap) error {
+
+	_, err := configMap.Clientset.CoreV1().ConfigMaps(namespace).Update(context.Background(), cm, metav1.UpdateOptions{})
+
+	return err
+}
+
 // ---
 
 func (configMap *ConfigMap) listAllConfigMap(call bool) {
@@ -281,6 +288,28 @@ func (configMap *ConfigMap) printListConfigMapIntoJson(call, withItem bool, name
 	fmt.Println(string(out))
 }
 
+func (configMap *ConfigMap) updateConfigMapByName(call bool, configMapName, namespace string) {
+	if !call {
+		return
+	}
+
+	cm, err := configMap.retrieveConfigMapByName(configMapName, namespace)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching configmap: %v\n", err)
+		return
+	}
+
+	cm.Data["LOG_LEVEL"] = "fatal" // change or add a key
+	// delete(cm.Data, "OLD_SETTING")  // remove a key
+
+	err = configMap.updateConfigMapWithConfigMap(namespace, cm)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error updating configmap: %v\n", err)
+	}
+
+	configMap.getConfigMapByName(true, cm.Name, cm.Namespace)
+}
+
 func (configMap *ConfigMap) Workon(call bool) {
 	if !call {
 		return
@@ -290,7 +319,7 @@ func (configMap *ConfigMap) Workon(call bool) {
 	fmt.Fprintf(os.Stderr, "configmap section\n")
 	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 
-	configMap.createATestConfigMap(false, "test", "dev")
+	configMap.createATestConfigMap(true, "test", "dev")
 
 	configMap.listAllConfigMap(false)
 
@@ -300,11 +329,13 @@ func (configMap *ConfigMap) Workon(call bool) {
 
 	configMap.getConfigMapWithSpecificLabels(false, "app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=loki", "")
 
+	configMap.updateConfigMapByName(true, "test", "dev")
+
 	configMap.printAConfigMapIntoJson(false, "test", "dev")
 
-	configMap.printListConfigMapIntoJson(true, false, "dev")
+	configMap.printListConfigMapIntoJson(false, false, "dev")
 
-	configMap.deleteATestConfigMap(true, "test", "dev")
+	configMap.deleteATestConfigMap(false, "test", "dev")
 
 	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 }
