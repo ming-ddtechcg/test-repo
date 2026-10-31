@@ -1,6 +1,6 @@
 #!/bin/sh
 
-EXIT_FILE="/tmp/.exit"
+EXIT_FILE="/.exit"
 
 
 #

@@ -22,7 +22,6 @@ func (configMap *ConfigMap) accessConfigMap(cm *corev1.ConfigMap) {
 		return
 	}
 
-	fmt.Fprintf(os.Stdout, "configmap\n")
 	fmt.Fprintf(os.Stdout, "name: %v\n", cm.Name)
 	fmt.Fprintf(os.Stdout, "namespace: %v\n", cm.Namespace)
 
