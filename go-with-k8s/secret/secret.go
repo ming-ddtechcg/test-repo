@@ -368,7 +368,7 @@ func (secret *Secret) Workon(call bool) {
 
 	secret.printASecretIntoYaml(false, "test", "dev")
 
-	secret.deleteATestSecret(true, "test", "dev")
+	secret.deleteATestSecret(false, "test", "dev")
 
 	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 }

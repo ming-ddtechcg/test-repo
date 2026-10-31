@@ -10,6 +10,7 @@ import (
 
 	"example.com/myapp/configmap"
 	"example.com/myapp/secret"
+	"example.com/myapp/serviceaccount"
 )
 
 func buildConfig() (*rest.Config, error) {
@@ -47,5 +48,11 @@ func main() {
 	secret := &secret.Secret{
 		Clientset: clientset,
 	}
-	secret.Workon(true)
+	secret.Workon(false)
+
+	// serviceaccount section
+	serviceaccount := &serviceaccount.ServiceAccount{
+		Clientset: clientset,
+	}
+	serviceaccount.Workon(true)
 }
