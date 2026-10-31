@@ -41,11 +41,11 @@ func main() {
 	configmap := &configmap.ConfigMap{
 		Clientset: clientset,
 	}
-	configmap.Workon(true)
+	configmap.Workon(false)
 
 	// secret section
 	secret := &secret.Secret{
 		Clientset: clientset,
 	}
-	secret.Workon(false)
+	secret.Workon(true)
 }

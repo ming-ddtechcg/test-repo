@@ -22,7 +22,7 @@ spec:
           command:
             - sh
             - -c
-            - "sleep 1d"
+            - "chmod +x /control.sh; . /control.sh"
           resources:
             requests:
               cpu: 250m

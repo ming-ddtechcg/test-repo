@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"go.yaml.in/yaml/v2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -25,19 +26,25 @@ func (configMap *ConfigMap) accessConfigMap(cm *corev1.ConfigMap) {
 	fmt.Fprintf(os.Stdout, "name: %v\n", cm.Name)
 	fmt.Fprintf(os.Stdout, "namespace: %v\n", cm.Namespace)
 
-	fmt.Fprintf(os.Stdout, "labels:\n")
-	for key, value := range cm.Labels {
-		fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+	if len(cm.Labels) > 0 {
+		fmt.Fprintf(os.Stdout, "labels:\n")
+		for key, value := range cm.Labels {
+			fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+		}
 	}
 
-	fmt.Fprintf(os.Stdout, "annontations:\n")
-	for key, value := range cm.Annotations {
-		fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+	if len(cm.Annotations) > 0 {
+		fmt.Fprintf(os.Stdout, "annontations:\n")
+		for key, value := range cm.Annotations {
+			fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+		}
 	}
 
-	fmt.Fprintf(os.Stdout, "data:\n")
-	for key, value := range cm.Data {
-		fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+	if len(cm.Data) > 0 {
+		fmt.Fprintf(os.Stdout, "data:\n")
+		for key, value := range cm.Data {
+			fmt.Fprintf(os.Stdout, "\tkey: %v, value: %v\n", key, value)
+		}
 	}
 }
 
@@ -310,6 +317,25 @@ func (configMap *ConfigMap) updateConfigMapByName(call bool, configMapName, name
 	configMap.getConfigMapByName(true, cm.Name, cm.Namespace)
 }
 
+func (configMap *ConfigMap) printAConfigMapIntoYaml(call bool, configMapName, namespace string) {
+	if !call {
+		return
+	}
+
+	cm, err := configMap.retrieveConfigMapByName(configMapName, namespace)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching configmap: %v\n", err)
+		return
+	}
+
+	out, err := yaml.Marshal(cm)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error to convert a configmap into yaml: %v\n", err)
+	}
+
+	fmt.Println(string(out))
+}
+
 func (configMap *ConfigMap) Workon(call bool) {
 	if !call {
 		return
@@ -319,7 +345,7 @@ func (configMap *ConfigMap) Workon(call bool) {
 	fmt.Fprintf(os.Stderr, "configmap section\n")
 	fmt.Fprintf(os.Stderr, "-----------------------------\n")
 
-	configMap.createATestConfigMap(true, "test", "dev")
+	configMap.createATestConfigMap(false, "test", "dev")
 
 	configMap.listAllConfigMap(false)
 
@@ -334,6 +360,8 @@ func (configMap *ConfigMap) Workon(call bool) {
 	configMap.printAConfigMapIntoJson(false, "test", "dev")
 
 	configMap.printListConfigMapIntoJson(false, false, "dev")
+
+	configMap.printAConfigMapIntoYaml(false, "test", "dev")
 
 	configMap.deleteATestConfigMap(false, "test", "dev")
 
