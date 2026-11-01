@@ -9,6 +9,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 
 	"example.com/myapp/configmap"
+	"example.com/myapp/deployment"
 	"example.com/myapp/secret"
 	"example.com/myapp/serviceaccount"
 )
@@ -55,4 +56,10 @@ func main() {
 		Clientset: clientset,
 	}
 	serviceaccount.Workon(false)
+
+	// deployment section
+	deployment := &deployment.Deployment{
+		Clientset: clientset,
+	}
+	deployment.Workon(true)
 }
